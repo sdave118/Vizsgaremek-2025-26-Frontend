@@ -1,11 +1,15 @@
 import { useState, useEffect, createContext } from "react";
+import { setAccessToken  as setAxiosToken} from "../services/authTokenService";
+import { loginUser, logoutUser, type LoginResult } from "../services/auth";
 
+export type LoginResponse = {
+    error?: string
+} 
 
 export type AuthContextType = {
     accessToken: string | null,
-    setAccessToken:(token:string | null) => void,
-    login: (token: string) => void,
-    logout: () => Promise<void>,
+    login: (email: string, password: string) => Promise<LoginResponse>,
+    logout: () => void,
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -13,21 +17,31 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 const AuthContextProvider = (props: {children: React.ReactNode}) => {
     const [accessToken, setAccessToken] = useState<string | null>(null)
 
-    const login = (token:string) => {
-        console.log("AuthContextProvider.login called with", token);
-        setAccessToken(token)
+    const login = async (email: string, password: string): Promise<LoginResponse> => {
+        const result: LoginResult = await loginUser(email, password)
+        setAxiosToken(result.token?? null)
+        setAccessToken(result.token?? null)
+        
+        if(!result.error) {return {}}
+        return {error: result.error}
+        
     }
 
     const logout = async () => {
-        //TODO: backend 
+        try {
+            await logoutUser()
+        }finally {
+            setAccessToken(null)
+            setAxiosToken(null)
+        }
+    }
 
-        setAccessToken(null)
-    } 
     useEffect(() => {
         console.log("AuthContextProvider accessToken changed:", accessToken);
     }, [accessToken]);
+
     return (
-        <AuthContext.Provider value={{accessToken, setAccessToken,login, logout}}>
+        <AuthContext.Provider value={{accessToken,login, logout}}>
             {props.children}
         </AuthContext.Provider>
     )

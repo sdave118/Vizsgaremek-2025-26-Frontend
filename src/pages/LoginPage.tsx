@@ -1,5 +1,4 @@
 import { useState } from "react";
-import {loginUser } from "../services/Authentication";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
@@ -10,12 +9,14 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const handleLogin = async () => {
-        const data = await loginUser(email, password);
-        console.log("access token", data?.token)
-        if (data) {
-            login(data.token);
-            navigate("/"); 
+        const data = await login(email, password)
+
+        if(!data.error){
+            navigate("/")
+            return
         }
+        //TODO: UI
+        alert(data.error)
     }
 
     return (
