@@ -1,5 +1,6 @@
 import { Check, TrendingUp } from "lucide-react";
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 
 const FeatureShowcase = () => {
   useEffect(() => {
@@ -11,7 +12,13 @@ const FeatureShowcase = () => {
       {/*Calorie Tracking*/}
 
       <article className="mx-auto max-w-7xl space-y-32">
-        <div className="grid grid-cols-1 flex-col-reverse gap-10 px-5 md:px-15 lg:grid-cols-2">
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="grid grid-cols-1 flex-col-reverse gap-10 px-5 md:px-15 lg:grid-cols-2"
+        >
           <section className="order-2 space-y-6 lg:order-1">
             <h1 className="text-3xl tracking-tight md:text-5xl">
               Calorie tracking
@@ -54,11 +61,17 @@ const FeatureShowcase = () => {
               />
             </div>
           </aside>
-        </div>
+        </motion.div>
 
         {/*Personal Reacipe*/}
 
-        <div className="grid grid-cols-1 flex-col-reverse gap-10 px-5 py-20 md:px-15 lg:grid-cols-2">
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="grid grid-cols-1 flex-col-reverse gap-10 px-5 py-20 md:px-15 lg:grid-cols-2"
+        >
           <div className="relative my-auto">
             <div className="absolute -inset-4 rounded-2xl bg-linear-to-r from-orange-400 to-pink-500 opacity-10 blur-2xl"></div>
             <div className="relative overflow-hidden rounded-2xl border border-gray-200 shadow-2xl">
@@ -99,10 +112,16 @@ const FeatureShowcase = () => {
               </div>
             </div>
           </section>
-        </div>
+        </motion.div>
 
         {/* Community and sharing */}
-        <div className="grid grid-cols-1 flex-col-reverse gap-10 px-5 py-20 md:px-15 lg:grid-cols-2">
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="grid grid-cols-1 flex-col-reverse gap-10 px-5 py-20 md:px-15 lg:grid-cols-2"
+        >
           <div className="order-2 lg:order-1">
             <h2 className="mb-6 text-4xl lg:text-5xl">Community and sharing</h2>
 
@@ -154,7 +173,7 @@ const FeatureShowcase = () => {
               />
             </div>
           </div>
-        </div>
+        </motion.div>
       </article>
     </>
   );

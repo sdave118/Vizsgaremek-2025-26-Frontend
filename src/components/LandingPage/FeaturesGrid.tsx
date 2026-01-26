@@ -10,6 +10,7 @@ import {
   Users,
 } from "lucide-react";
 import FeaturesCard from "./FeaturesCard";
+import { motion } from "framer-motion";
 
 const featuresList = [
   {
@@ -71,7 +72,13 @@ const FeaturesGrid = () => {
   return (
     <>
       <section className="grid-col-1 mx-auto grid justify-center space-y-5 py-30 md:max-lg:py-40">
-        <header className="mx-auto space-y-5 text-center">
+        <motion.header
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          viewport={{ once: true }}
+          className="mx-auto space-y-5 text-center"
+        >
           <h1 className="text-3xl tracking-widest md:text-5xl">
             Everything you need
           </h1>
@@ -79,8 +86,14 @@ const FeaturesGrid = () => {
             Complete solution for a healthy lifestyle - calorie counter,
             recipes, community and health tracking on one platform.
           </h2>
-        </header>
-        <article className="grid gap-8 px-10 lg:grid-cols-3 lg:px-30">
+        </motion.header>
+        <motion.article
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="grid gap-8 px-10 lg:grid-cols-3 lg:px-30"
+        >
           {featuresList.map((features, _) => (
             <FeaturesCard
               key={_}
@@ -89,7 +102,7 @@ const FeaturesGrid = () => {
               description={features.description}
             />
           ))}
-        </article>
+        </motion.article>
       </section>
     </>
   );

@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
+import { motion } from "motion/react";
 
 const HeroSection = () => {
   return (
     <>
-      <div className="from-primary-green-50 relative overflow-hidden bg-linear-to-br via-white to-blue-50 px-15 py-10 md:py-30 lg:px-13 lg:py-25">
-        <div className="mx-auto max-w-7xl">
+      <div className="from-primary-green-50 relative overflow-hidden bg-linear-to-br via-white to-blue-50 px-15 py-10 md:py-30 lg:px-13 lg:py-25 xl:py-50">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="mx-auto max-w-7xl"
+        >
           <section className="grid grid-cols-1 items-center gap-12 md:gap-20 md:max-lg:text-center lg:grid-cols-2 lg:gap-8">
             <article className="flex flex-col gap-8 md:gap-15">
               <h1 className="text-5xl font-semibold tracking-tight lg:text-7xl">
@@ -43,7 +49,7 @@ const HeroSection = () => {
               </div>
             </aside>
           </section>
-        </div>
+        </motion.div>
       </div>
     </>
   );
