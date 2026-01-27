@@ -66,7 +66,7 @@ const FeatureShowcase = () => {
         {/*Personal Reacipe*/}
 
         <motion.div
-          initial={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: "easeInOut" }}
           viewport={{ once: true, amount: 0.3 }}
@@ -119,7 +119,7 @@ const FeatureShowcase = () => {
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: "easeInOut" }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.5 }}
           className="grid grid-cols-1 flex-col-reverse gap-10 px-5 py-20 md:px-15 lg:grid-cols-2"
         >
           <div className="order-2 lg:order-1">
