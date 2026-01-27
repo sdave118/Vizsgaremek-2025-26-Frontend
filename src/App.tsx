@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import { ProtectedRoute, PublicOnlyRoute } from "./utils/RouterGuard";
 import { useAuthContext } from "./context/AuthContextProvider";
 import ScrollToTop from "./utils/ScrollToTop";
+import SignUpPage from "./pages/SignUpPage";
 
 const App = () => {
   const { accessToken } = useAuthContext();
@@ -19,6 +20,8 @@ const App = () => {
           path="/"
           element={accessToken ? <DetailsPage /> : <LandingPage />}
         />
+
+        <Route path="/register" element={<SignUpPage />}></Route>
 
         <Route element={<PublicOnlyRoute />}>
           <Route path="/login" element={<LoginPage />} />
