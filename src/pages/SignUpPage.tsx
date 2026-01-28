@@ -1,13 +1,14 @@
 import { ArrowLeft } from "lucide-react";
 import Silk from "../components/Silk";
 import Stepper, { Step } from "../components/Stepper";
+import { Link } from "react-router-dom";
 
 const SignUpPage = () => {
   return (
-    <main className="relative min-h-screen w-full overflow-hidden">
-      <div className="absolute inset-0 -z-10 hidden md:block">
+    <main className="relative w-full overflow-hidden">
+      <div className="absolute inset-0 -z-10 h-full w-screen overflow-hidden">
         <Silk
-          speed={2.5}
+          speed={5}
           scale={0.8}
           color="#6b9080"
           noiseIntensity={1.5}
@@ -16,18 +17,22 @@ const SignUpPage = () => {
       </div>
 
       <section className="absolute pt-10 pl-10">
-        <ArrowLeft className="b-white size-10 rounded-full border p-1 text-black transition-all duration-300 hover:size-15 md:text-white" />
+        <Link to="/">
+          <ArrowLeft className="b-white hidden size-10 rounded-full border p-1 text-black transition-all duration-300 hover:scale-110 md:text-white xl:block" />
+        </Link>
       </section>
 
-      <section className="absolute bottom-0 left-0 pb-10 pl-10 text-5xl text-black italic md:text-white">
+      <section className="absolute bottom-0 left-0 hidden pb-10 pl-10 text-5xl text-black italic transition-transform hover:scale-110 md:text-white xl:block">
         NutriLife
       </section>
 
-      <section className="relative ml-auto min-h-screen w-full space-y-10 rounded-none bg-white px-6 shadow-2xl md:w-[50%] md:rounded-l-2xl">
-        <h1 className="pt-20 text-center text-2xl font-bold">Sign Up</h1>
+      <section className="relative ml-auto min-h-screen w-full space-y-10 rounded-none bg-transparent px-6 shadow-2xl md:w-[50%] md:rounded-2xl md:max-xl:mx-auto md:max-xl:mt-60 md:max-xl:scale-140 md:max-xl:shadow-none xl:bg-white">
+        <h1 className="pt-20 text-center text-3xl font-bold text-white xl:text-black">
+          Sign Up
+        </h1>
 
         <Stepper
-          initialStep={4}
+          initialStep={1}
           backButtonText="Previous"
           nextButtonText="Next"
         >
@@ -48,6 +53,15 @@ const SignUpPage = () => {
             <p>You made it!</p>
           </Step>
         </Stepper>
+        <h2 className="text-center font-extralight italic max-xl:text-white">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-primary-green-50 xl:text-primary-green-500 underline transition-all hover:font-normal"
+          >
+            Log in
+          </Link>
+        </h2>
       </section>
     </main>
   );
