@@ -7,12 +7,17 @@ type UserDetailsStepProps = {
     field: K,
     value: UserDetailsType[K],
   ) => void;
+  errors?: Partial<Record<keyof UserDetailsType, string>>;
 };
 
-const UserDetailsStep = ({ details, onChange }: UserDetailsStepProps) => {
+const UserDetailsStep = ({
+  details,
+  onChange,
+  errors = {},
+}: UserDetailsStepProps) => {
   return (
     <Step>
-      <section className="space-y-10 py-2">
+      <section className="space-y-5 py-2">
         <div className="grid grid-cols-2 gap-5">
           {/* First Name */}
           <div className="relative z-0">
@@ -31,6 +36,9 @@ const UserDetailsStep = ({ details, onChange }: UserDetailsStepProps) => {
             >
               First Name
             </label>
+            {errors.firstName && (
+              <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
+            )}
           </div>
 
           {/* Last Name */}
@@ -50,6 +58,9 @@ const UserDetailsStep = ({ details, onChange }: UserDetailsStepProps) => {
             >
               Last Name
             </label>
+            {errors.lastName && (
+              <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
+            )}
           </div>
         </div>
 
@@ -69,6 +80,9 @@ const UserDetailsStep = ({ details, onChange }: UserDetailsStepProps) => {
           >
             Email Address
           </label>
+          {errors.email && (
+            <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+          )}
         </div>
 
         {/* Password */}
@@ -87,6 +101,9 @@ const UserDetailsStep = ({ details, onChange }: UserDetailsStepProps) => {
           >
             Password
           </label>
+          {errors.password && (
+            <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+          )}
         </div>
 
         {/* Gender Select */}
@@ -114,6 +131,9 @@ const UserDetailsStep = ({ details, onChange }: UserDetailsStepProps) => {
               <option value="female">Female</option>
               <option value="other">Other</option>
             </select>
+            {errors.gender && (
+              <p className="mt-1 text-sm text-red-600">{errors.gender}</p>
+            )}
           </div>
         </form>
         {/* Birth Date */}
@@ -132,6 +152,9 @@ const UserDetailsStep = ({ details, onChange }: UserDetailsStepProps) => {
           >
             Birth Date
           </label>
+          {errors.birthDate && (
+            <p className="mt-1 text-sm text-red-600">{errors.birthDate}</p>
+          )}
         </div>
       </section>
     </Step>

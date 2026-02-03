@@ -4,6 +4,8 @@ import { motion, type Variants } from "framer-motion";
 import { Link } from "react-router-dom";
 import UserDetailsStep from "./UserDetailsStep";
 import { useSignUpContext } from "../../context/UserSignUpContext";
+import { useRef, useState } from "react";
+import { validateUserDetails } from "../../utils/signUpValidators";
 
 const AnimatedDiv = ({ children }: { children: React.ReactNode }) => {
   const isDesktop = useMediaQuery({ query: "(min-width: 1280px)" });
@@ -39,18 +41,52 @@ const desktopVariant: Variants = {
 const SignUpSection = () => {
   const { userDetails, updateUserDetails } = useSignUpContext();
 
+  // key + initialStep to allow remounting Stepper to previous step if validation fails
+  const [stepperKey, setStepperKey] = useState(0);
+  const [stepperInitial, setStepperInitial] = useState(1);
+  const prevStepRef = useRef<number>(1);
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleStepChange = (newStep: number) => {
+    const prev = prevStepRef.current;
+
+    // only validate when moving forward from step 1 (adjustable per-step)
+    if (newStep > prev && prev === 1) {
+      const { isValid, errors: vErrors } = validateUserDetails(userDetails);
+      if (!isValid) {
+        // show inline errors and revert UI by remounting Stepper to previous step
+        setErrors(vErrors as Record<string, string>);
+        setStepperInitial(prev);
+        setStepperKey((k) => k + 1);
+        return;
+      } else {
+        setErrors({});
+      }
+    }
+
+    // accept the move
+    prevStepRef.current = newStep;
+  };
+
   return (
     <AnimatedDiv>
-      <section className="relative ml-auto min-h-screen w-full space-y-10 rounded-none bg-transparent px-6 shadow-2xl md:w-[50%] md:max-xl:mx-auto md:max-xl:mt-60 md:max-xl:scale-140 md:max-xl:rounded-2xl md:max-xl:shadow-none xl:rounded-l-2xl xl:bg-white">
+      <section className="relative ml-auto min-h-screen w-full space-y-10 rounded-none bg-transparent px-6 shadow-2xl md:w-[50%] md:max-xl:mx-auto md:max-xl:mt-60 md:max-xl:scale-140 md:max-xl:rounded-2xl md:max-xl:shadow-none xl:max-h-screen xl:rounded-l-2xl xl:bg-white">
         <h1 className="pt-20 text-center text-3xl font-bold text-white xl:text-black">
           Sign Up
         </h1>
         <Stepper
-          initialStep={1}
+          key={stepperKey}
+          initialStep={stepperInitial}
           backButtonText="Previous"
           nextButtonText="Next"
+          onStepChange={handleStepChange}
         >
-          <UserDetailsStep details={userDetails} onChange={updateUserDetails} />
+          <UserDetailsStep
+            details={userDetails}
+            onChange={updateUserDetails}
+            errors={errors}
+          />
 
           <Step>
             <h2>Step 2</h2>
