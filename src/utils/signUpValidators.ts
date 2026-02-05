@@ -1,3 +1,4 @@
+import api from "../api/axios";
 import type {
   UserAttributesType,
   UserDetailsType,
@@ -91,4 +92,39 @@ export const validateUserGoals = (
     }
   }
   return { isValid: Object.keys(errors).length === 0, errors };
+};
+
+export const registerUser = async (
+  details: UserDetailsType,
+): Promise<{ succes: boolean; error?: string }> => {
+  try {
+    await api.post("/api/auth/register", details);
+  } catch (error) {
+    return {
+      succes: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+  localStorage.removeItem("signupUserAttributes");
+  return { succes: true, error: "" };
+};
+
+export const addUserAttribute = async (attributes: UserAttributesType) => {
+  try {
+    await api.post("/api/users/me/attributes/add", attributes, {
+      withCredentials: true,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+  localStorage.removeItem("signupUserAttributes");
+};
+
+export const addUserGoal = async (goals: UserGoalsType) => {
+  try {
+    await api.post("/api/users/me/goal/add", goals, { withCredentials: true });
+  } catch (error) {
+    console.error(error);
+  }
+  localStorage.removeItem("signupUserGoals");
 };

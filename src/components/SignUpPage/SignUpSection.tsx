@@ -1,17 +1,21 @@
 import { useMediaQuery } from "react-responsive";
 import Stepper, { Step } from "../Stepper";
 import { motion, type Variants } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserDetailsStep from "./UserDetailsStep";
 import { useSignUpContext } from "../../context/UserSignUpContext";
 import { useRef, useState } from "react";
 import {
+  addUserAttribute,
+  addUserGoal,
+  registerUser,
   validateUserAttributes,
   validateUserDetails,
   validateUserGoals,
 } from "../../utils/signUpValidators";
 import UserAttributesStep from "./UserAttributesStep";
 import UserGoalStep from "./UserGoalStep";
+import { useAuthContext } from "../../context/AuthContextProvider";
 
 const AnimatedDiv = ({ children }: { children: React.ReactNode }) => {
   const isDesktop = useMediaQuery({ query: "(min-width: 1280px)" });
@@ -56,10 +60,13 @@ const SignUpSection = () => {
 
   // key + initialStep to allow remounting Stepper to previous step if validation fails
   const [stepperKey, setStepperKey] = useState(0);
-  const [stepperInitial, setStepperInitial] = useState(4);
+  const [stepperInitial, setStepperInitial] = useState(1);
   const prevStepRef = useRef<number>(1);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const { login } = useAuthContext();
+  const navigate = useNavigate();
 
   const handleStepChange = (newStep: number) => {
     const prev = prevStepRef.current;
@@ -105,6 +112,31 @@ const SignUpSection = () => {
     prevStepRef.current = newStep;
   };
 
+  const handleFinalStepCompleted = async () => {
+    const res = await registerUser(userDetails);
+    if (!res.succes) {
+      setStepperInitial(1);
+      setStepperKey((k) => k + 1);
+      setErrors({ email: "An account with this email already exist." });
+      return;
+    }
+
+    const loginRes = await login(userDetails.email, userDetails.password);
+    if (loginRes.error) {
+      console.error("Login after register failed:", loginRes.error);
+      return;
+    }
+
+    try {
+      await addUserAttribute(userAttributes);
+      await addUserGoal(userGoals);
+    } catch (err) {
+      console.error("Failed to add attributes/goals:", err);
+    }
+
+    navigate("/");
+  };
+
   return (
     <AnimatedDiv>
       <section className="relative ml-auto min-h-screen w-full space-y-10 rounded-none bg-transparent px-6 shadow-2xl md:w-[50%] md:max-xl:mx-auto md:max-xl:mt-60 md:max-xl:scale-140 md:max-xl:rounded-2xl md:max-xl:shadow-none xl:max-h-screen xl:rounded-l-2xl xl:bg-white">
@@ -117,6 +149,7 @@ const SignUpSection = () => {
           backButtonText="Previous"
           nextButtonText="Next"
           onStepChange={handleStepChange}
+          onFinalStepCompleted={handleFinalStepCompleted}
         >
           <UserDetailsStep
             details={userDetails}
@@ -134,7 +167,6 @@ const SignUpSection = () => {
             errors={errors}
           />
           <Step>
-            <h2>Final Step</h2>
             <p>You made it!</p>
           </Step>
         </Stepper>

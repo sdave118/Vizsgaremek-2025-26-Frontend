@@ -85,6 +85,7 @@ const UserSignUpContext = ({ children }: { children: React.ReactNode }) => {
     value: UserGoalsType[K],
   ) => {
     setUserGoals((prev) => ({ ...prev, [field]: value }));
+    localStorage.setItem("signupUserGoals", JSON.stringify(userGoals));
   };
 
   return (
