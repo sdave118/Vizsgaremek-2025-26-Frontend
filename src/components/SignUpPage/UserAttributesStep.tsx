@@ -38,7 +38,7 @@ const UserAttributesStep = ({
             Height (cm)
           </label>
           {errors.height && (
-            <p className="mt-1 text-sm text-red-600">{errors.height}</p>
+            <p className="my-1 text-[10px] text-red-600">{errors.height}</p>
           )}
         </div>
       </section>
@@ -59,7 +59,7 @@ const UserAttributesStep = ({
             Weight (kg)
           </label>
           {errors.weight && (
-            <p className="mt-1 text-sm text-red-600">{errors.weight}</p>
+            <p className="my-1 text-[10px] text-red-600">{errors.weight}</p>
           )}
         </div>
       </section>
@@ -80,7 +80,7 @@ const UserAttributesStep = ({
             Measured At
           </label>
           {errors.measuredAt && (
-            <p className="mt-1 text-sm text-red-600">{errors.measuredAt}</p>
+            <p className="my-1 text-[10px] text-red-600">{errors.measuredAt}</p>
           )}
         </div>
       </section>

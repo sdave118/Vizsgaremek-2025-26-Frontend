@@ -37,7 +37,9 @@ const UserDetailsStep = ({
               First Name
             </label>
             {errors.firstName && (
-              <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
+              <p className="my-1 text-[10px] text-red-600">
+                {errors.firstName}
+              </p>
             )}
           </div>
 
@@ -59,7 +61,7 @@ const UserDetailsStep = ({
               Last Name
             </label>
             {errors.lastName && (
-              <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
+              <p className="my-1 text-[10px] text-red-600">{errors.lastName}</p>
             )}
           </div>
         </div>
@@ -81,7 +83,7 @@ const UserDetailsStep = ({
             Email Address
           </label>
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+            <p className="my-1 text-[10px] text-red-600">{errors.email}</p>
           )}
         </div>
 
@@ -102,7 +104,7 @@ const UserDetailsStep = ({
             Password
           </label>
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+            <p className="my-1 text-[10px] text-red-600">{errors.password}</p>
           )}
         </div>
 
@@ -132,7 +134,7 @@ const UserDetailsStep = ({
               <option value="other">Other</option>
             </select>
             {errors.gender && (
-              <p className="mt-1 text-sm text-red-600">{errors.gender}</p>
+              <p className="my-1 text-[10px] text-red-600">{errors.gender}</p>
             )}
           </div>
         </form>
@@ -153,7 +155,7 @@ const UserDetailsStep = ({
             Birth Date
           </label>
           {errors.birthDate && (
-            <p className="mt-1 text-sm text-red-600">{errors.birthDate}</p>
+            <p className="my-1 text-[10px] text-red-600">{errors.birthDate}</p>
           )}
         </div>
       </section>

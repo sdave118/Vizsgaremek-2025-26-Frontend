@@ -37,7 +37,9 @@ const UserGoalStep = ({
             Target Weight (kg)
           </label>
           {errors.targetweight && (
-            <p className="mt-1 text-sm text-red-600">{errors.targetweight}</p>
+            <p className="my-1 text-[10px] text-red-600">
+              {errors.targetweight}
+            </p>
           )}
         </div>
       </section>
@@ -58,7 +60,7 @@ const UserGoalStep = ({
             Deadline
           </label>
           {errors.deadline && (
-            <p className="mt-1 text-sm text-red-600">{errors.deadline}</p>
+            <p className="my-1 text-[10px] text-red-600">{errors.deadline}</p>
           )}
         </div>
       </section>
