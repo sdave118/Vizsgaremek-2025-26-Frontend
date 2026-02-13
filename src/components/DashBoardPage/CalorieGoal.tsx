@@ -1,33 +1,47 @@
 import { Calendar, Dumbbell, TrendingUp } from "lucide-react";
 import ProgressBar from "../ui/ProgressBar";
 
-const CalorieGoal = () => {
+const CalorieGoal = ({
+  consumedCalorie,
+  burnedCalorie,
+  netCalorie,
+  weight,
+  workoutToday,
+  bmr,
+}: {
+  consumedCalorie: number;
+  burnedCalorie: number;
+  netCalorie: number;
+  weight: number | undefined;
+  workoutToday: number;
+  bmr: number;
+}) => {
   return (
     <>
       <section className="bg-blur space-y-4 rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
         <div className="">
           <h2 className="font-light">Daily calorie goal</h2>
-          <h1 className="text-3xl">2300 cal</h1>
+          <h1 className="text-3xl">{bmr}</h1>
         </div>
         <div className="space-y-2">
-          <ProgressBar value={(1100 / 2300) * 100} />
+          <ProgressBar value={(netCalorie / bmr) * 100} />
           <div className="flex justify-between">
-            <p>1100</p>
-            <p>remaining</p>
+            <p>{netCalorie}</p>
+            <p>{bmr - netCalorie} remaining</p>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div className="rounded-xl border border-gray-200 bg-white p-2 shadow-2xs">
             <p className="text-xs">Consumed</p>
-            <p>1100</p>
+            <p>{consumedCalorie ?? 0}</p>
           </div>
           <div className="rounded-xl border border-gray-200 bg-white p-2 shadow-2xs">
             <p className="text-xs">Burned</p>
-            <p>0</p>
+            <p>{burnedCalorie ?? 0}</p>
           </div>
           <div className="rounded-xl border border-gray-200 bg-white p-2 shadow-2xs">
             <p className="text-xs">Net</p>
-            <p>1100</p>
+            <p>{netCalorie ?? 0}</p>
           </div>
         </div>
       </section>
@@ -38,7 +52,8 @@ const CalorieGoal = () => {
           </div>
           <div>
             <h2 className="font-extralight">Current Goal</h2>
-            <h1 className="text-xl">Muscle Gain</h1>
+            {/*TODO: check current goal*/}
+            <h1 className="text-xl">N/A</h1>
           </div>
         </div>
         <div className="flex items-center space-x-5 rounded-xl border border-gray-200 bg-white p-4">
@@ -47,7 +62,7 @@ const CalorieGoal = () => {
           </div>
           <div>
             <h2 className="font-extralight">Current Weight</h2>
-            <h1 className="text-xl">60 kg</h1>
+            <h1 className="text-xl">{weight ?? "error"}</h1>
           </div>
         </div>
         <div className="flex items-center space-x-5 rounded-xl border border-gray-200 bg-white p-4">
@@ -56,7 +71,7 @@ const CalorieGoal = () => {
           </div>
           <div>
             <h2 className="font-extralight">Workouts Today</h2>
-            <h1 className="text-xl">0</h1>
+            <h1 className="text-xl">{workoutToday}</h1>
           </div>
         </div>
       </section>

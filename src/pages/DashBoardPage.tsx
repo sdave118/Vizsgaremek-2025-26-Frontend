@@ -5,6 +5,10 @@ import CalorieGoal from "../components/DashBoardPage/CalorieGoal";
 import TodaysMeal from "../components/DashBoardPage/TodaysMeal";
 import { NotebookTabs, Utensils } from "lucide-react";
 import { useMeals } from "../hooks/useMeals";
+import { useCaliorie } from "../hooks/useCalorieGoal";
+import { useAttributes } from "../hooks/useAttributes";
+import { useActivity } from "../hooks/useActivity";
+import { useEffect } from "react";
 
 export const DashBoardPage = () => {
   // //BarChart
@@ -32,6 +36,16 @@ export const DashBoardPage = () => {
   //   height: 200,
   // };
   const { meals } = useMeals();
+  const { consumedCalorie, reFetchDailyIntake, netCalorie } = useCaliorie();
+  const { lastAttribute, fetchAttributes } = useAttributes();
+  const { activityData, fetchActivities, burnedCalorie } = useActivity();
+
+  useEffect(() => {
+    reFetchDailyIntake();
+    fetchAttributes();
+    fetchActivities();
+  }, [reFetchDailyIntake, fetchAttributes, fetchActivities]);
+
   return (
     <>
       <Navbar />
@@ -42,7 +56,14 @@ export const DashBoardPage = () => {
           <h2 className="text-md font-extralight text-neutral-600 md:text-xl">
             Here's your nutrition overview for today
           </h2>
-          <CalorieGoal />
+          <CalorieGoal
+            consumedCalorie={consumedCalorie}
+            burnedCalorie={burnedCalorie}
+            netCalorie={netCalorie}
+            weight={lastAttribute?.weight}
+            workoutToday={activityData?.data.length ?? 0}
+            bmr={lastAttribute?.bmr ?? 0}
+          />
 
           {/* <section className="grid-col-1 grid gap-4 lg:grid-cols-3">
             <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-2">
