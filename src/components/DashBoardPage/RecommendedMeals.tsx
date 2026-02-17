@@ -13,7 +13,7 @@ const MealItem = ({ type, name, recipeId }: MealItemProps) => (
       <p className="text-xs font-extralight text-gray-600">{type}</p>
     </div>
     <button
-      className="flex items-center justify-center gap-1 rounded-xl border border-gray-400 px-3 py-2 text-sm whitespace-nowrap transition-colors hover:bg-gray-500 hover:text-white sm:self-center"
+      className="hover:bg-primary-green-400 flex items-center justify-center gap-1 rounded-xl border border-gray-400 bg-white px-3 py-2 text-sm whitespace-nowrap transition-colors hover:text-white sm:self-center"
       onClick={() => {
         console.log(
           "TODO: Recept oldal megcsinalasa utan oda iranyit" + recipeId,
@@ -60,7 +60,7 @@ const RecommendedMeals = ({
           <h2 className="text-lg font-semibold sm:text-xl">
             Recommended Meals
           </h2>
-          <button className="self-start rounded-xl border border-gray-400 px-3 py-2 text-sm whitespace-nowrap transition-colors hover:bg-gray-100 sm:self-auto">
+          <button className="self-start rounded-xl border border-gray-400 px-3 py-2 text-sm whitespace-nowrap transition-colors hover:bg-neutral-100 sm:self-auto">
             View Plan
           </button>
         </div>

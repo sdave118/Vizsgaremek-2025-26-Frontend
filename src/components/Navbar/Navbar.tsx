@@ -1,5 +1,5 @@
 import { useAuthContext } from "../../context/AuthContextProvider";
-import LandPageNavElements from "./LandPageNavElements";
+import LandingPageNavElements from "./LandingPageNavElements";
 import LoggedInNavElements from "./LoggedInNavElements";
 
 const Navbar = () => {
@@ -12,7 +12,7 @@ const Navbar = () => {
           <img src="placeholder.svg" alt="" />
           <span className="self-center font-semibold">ProductName</span>
         </a>
-        {accessToken ? <LoggedInNavElements /> : <LandPageNavElements />}
+        {accessToken ? <LoggedInNavElements /> : <LandingPageNavElements />}
       </div>
     </nav>
   );

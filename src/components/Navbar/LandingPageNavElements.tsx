@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const LandPageNavElements = () => {
+const LandingPageNavElements = () => {
   return (
     <div>
       <div className="flex space-x-15">
@@ -16,4 +16,4 @@ const LandPageNavElements = () => {
     </div>
   );
 };
-export default LandPageNavElements;
+export default LandingPageNavElements;

@@ -6,6 +6,11 @@ const api = axios.create({
   withCredentials: true,
 });
 
+const refreshApi = axios.create({
+  baseURL: "https://localhost:7145/api",
+  withCredentials: true,
+});
+
 api.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
@@ -28,10 +33,15 @@ api.interceptors.response.use(
       originalRequest.retryRequest = true;
 
       try {
-        const response = await api.post(
+        const response = await refreshApi.post(
           "/auth/refresh",
           {},
-          { withCredentials: true },
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
         );
 
         const newToken = response.data?.token;
