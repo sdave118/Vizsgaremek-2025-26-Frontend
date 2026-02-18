@@ -11,8 +11,13 @@ export type AttributeType = {
   calories: number;
 };
 
+export type UserAttributeResponse = {
+  message: string;
+  data: AttributeType[];
+};
+
 export const useAttributes = () => {
-  const [attributesData, setAttributesData] = useState<AttributeType[]>([]);
+  const [attributesData, setAttributesData] = useState<UserAttributeResponse>();
 
   const fetchAttributes = useCallback(async () => {
     const res = await api.get("/users/me/attributes", {
@@ -24,7 +29,7 @@ export const useAttributes = () => {
 
   const lastAttribute = useMemo(() => {
     if (!attributesData) return;
-    return attributesData.at(-1);
+    return attributesData.data.at(-1);
   }, [attributesData]);
 
   return {

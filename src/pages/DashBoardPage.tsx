@@ -3,13 +3,14 @@ import Navbar from "../components/Navbar/Navbar";
 // import Box from "@mui/material/Box";
 import CalorieGoal from "../components/DashBoardPage/CalorieGoal";
 import TodaysMeal from "../components/DashBoardPage/TodaysMeal";
-import { NotebookTabs, Utensils } from "lucide-react";
+import { Utensils } from "lucide-react";
 import { useMeals } from "../hooks/useMeals";
 import { useCaliorie } from "../hooks/useCalorieGoal";
 import { useAttributes } from "../hooks/useAttributes";
 import { useActivity } from "../hooks/useActivity";
 import { useEffect } from "react";
 import RecommendedMeals from "../components/DashBoardPage/RecommendedMeals";
+import AddExerciseModal from "../components/ActivityModal";
 
 export const DashBoardPage = () => {
   // //BarChart
@@ -39,14 +40,28 @@ export const DashBoardPage = () => {
   const { meals, todayRecommendedMeals, reFetchMeals } = useMeals();
   const { consumedCalorie, reFetchDailyIntake, netCalorie } = useCaliorie();
   const { lastAttribute, fetchAttributes } = useAttributes();
-  const { activityData, fetchActivities, burnedCalorie } = useActivity();
+  const {
+    activityData,
+    userActivityData,
+    fetchActivities,
+    fetchUserActivities,
+    burnedCalorie,
+    addUserActivity,
+  } = useActivity();
 
   useEffect(() => {
     reFetchDailyIntake();
     fetchAttributes();
-    fetchActivities();
+    fetchUserActivities();
     reFetchMeals();
-  }, [reFetchDailyIntake, fetchAttributes, fetchActivities, reFetchMeals]);
+    fetchActivities();
+  }, [
+    reFetchDailyIntake,
+    fetchAttributes,
+    fetchUserActivities,
+    reFetchMeals,
+    fetchActivities,
+  ]);
 
   return (
     <>
@@ -63,7 +78,7 @@ export const DashBoardPage = () => {
             burnedCalorie={burnedCalorie}
             netCalorie={netCalorie}
             weight={lastAttribute?.weight}
-            workoutToday={activityData?.data.length ?? 0}
+            workoutToday={userActivityData?.data.length ?? 0}
             bmr={lastAttribute?.calories ?? 0} //calorie goal
             goalType={lastAttribute?.goalType ?? "N/A"}
           />
@@ -104,15 +119,11 @@ export const DashBoardPage = () => {
           <TodaysMeal todayMeals={meals} />
 
           <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="flex items-center space-x-5 rounded-xl border border-gray-200 bg-white p-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100">
-                <NotebookTabs className="text-orange-600" />
-              </div>
-              <div>
-                <h2 className="text-xl">Add Exerecise</h2>
-                <h1 className="font-extralight">Track your workout activity</h1>
-              </div>
-            </div>
+            <AddExerciseModal
+              activityData={activityData}
+              addUserActivity={addUserActivity}
+            />
+
             <div className="flex items-center space-x-5 rounded-xl border border-gray-200 bg-white p-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
                 <Utensils className="text-blue-600" />
