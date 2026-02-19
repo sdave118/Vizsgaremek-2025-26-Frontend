@@ -32,6 +32,10 @@ const AddExerciseModal = ({
   return (
     <>
       <Modal
+        onClose={() => {
+          setSelectedActivity(1);
+          setDuration(1);
+        }}
         trigger={
           <div className="flex items-center space-x-5 rounded-xl border border-gray-200 bg-white p-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100">
@@ -47,7 +51,9 @@ const AddExerciseModal = ({
         actions={(close) => (
           <>
             <button
-              onClick={close}
+              onClick={() => {
+                close();
+              }}
               className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Cancel
@@ -56,15 +62,14 @@ const AddExerciseModal = ({
               onClick={async () => {
                 try {
                   await addUserActivity(selectedActivity, duration);
-                  addNotification("Exercise added successfully!", "success");
+                  addNotification("Exercise added successfully!");
                 } catch {
                   addNotification("Something went wrong", "error");
                 }
-                setSelectedActivity(1);
-                setDuration(1);
+
                 close();
               }}
-              className="bg-primary-green-600 hover:bg-primary-green-700 rounded-lg px-4 py-2 text-sm font-semibold text-white"
+              className="bg-primary-green-400 hover:bg-primary-green-500 rounded-lg px-4 py-2 text-sm font-semibold text-white"
             >
               Add Exercise
             </button>

@@ -12,6 +12,7 @@ export type ModalProps = {
   description?: string;
   children?: ReactNode;
   actions?: (close: () => void) => ReactNode;
+  onClose: () => void;
 };
 
 const Modal = ({
@@ -20,9 +21,13 @@ const Modal = ({
   description,
   children,
   actions,
+  onClose,
 }: ModalProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const close = (): void => setIsOpen(false);
+  const close = (): void => {
+    setIsOpen(false);
+    onClose?.();
+  };
   const open = (): void => setIsOpen(true);
 
   return (
@@ -45,9 +50,7 @@ const Modal = ({
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
           <DialogPanel className="w-full max-w-lg space-y-4 rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
             {title && (
-              <DialogTitle className="text-lg font-bold text-gray-900">
-                {title}
-              </DialogTitle>
+              <DialogTitle className="text-lg font-bold">{title}</DialogTitle>
             )}
 
             {description && (

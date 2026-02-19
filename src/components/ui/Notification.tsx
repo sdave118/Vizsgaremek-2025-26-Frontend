@@ -45,7 +45,7 @@ function SingleNotification({
   onRemove: () => void;
 }) {
   const type = notification.type ?? "success";
-  const duration = notification.duration ?? 100000;
+  const duration = notification.duration ?? 4000;
 
   useEffect(() => {
     const timer = setTimeout(onRemove, duration);
