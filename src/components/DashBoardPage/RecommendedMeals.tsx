@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { DailyMeal } from "../../hooks/useMeals";
 
 interface MealItemProps {
@@ -12,16 +13,12 @@ const MealItem = ({ type, name, recipeId }: MealItemProps) => (
       <p className="truncate text-sm font-semibold">{name}</p>
       <p className="text-xs font-extralight text-gray-600">{type}</p>
     </div>
-    <button
+    <Link
+      to={`/recipe/${recipeId}`}
       className="hover:bg-primary-green-400 flex items-center justify-center gap-1 rounded-xl border border-gray-400 bg-white px-3 py-2 text-sm whitespace-nowrap transition-colors hover:text-white sm:self-center"
-      onClick={() => {
-        console.log(
-          "TODO: Recept oldal megcsinalasa utan oda iranyit" + recipeId,
-        );
-      }}
     >
       View recipe <span className="ml-1">→</span>
-    </button>
+    </Link>
   </div>
 );
 
@@ -60,9 +57,12 @@ const RecommendedMeals = ({
           <h2 className="text-lg font-semibold sm:text-xl">
             Recommended Meals
           </h2>
-          <button className="self-start rounded-xl border border-gray-400 px-3 py-2 text-sm whitespace-nowrap transition-colors hover:bg-neutral-100 sm:self-auto">
+          <Link
+            to="/meal-plan"
+            className="self-start rounded-xl border border-gray-400 px-3 py-2 text-sm whitespace-nowrap transition-colors hover:bg-neutral-100 sm:self-auto"
+          >
             View Plan
-          </button>
+          </Link>
         </div>
         <div className="space-y-3">
           {mealTypes.map(({ name, meal, recipeId }) => (

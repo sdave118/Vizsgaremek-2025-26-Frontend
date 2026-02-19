@@ -8,7 +8,7 @@ export type NotificationItem = {
   id: string;
   message: string;
   type?: NotificationType;
-  duration?: number; // ms, default 4000
+  duration?: number; // ms
 };
 
 type NotificationProps = {

@@ -26,9 +26,13 @@ const App = () => {
             path="/"
             element={accessToken ? <DashBoardPage /> : <LandingPage />}
           />
-          <Route path="/register" element={<SignUpPage />}></Route>
+          <Route path="/register" element={<SignUpPage />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/details" element={<DashBoardPage />}></Route>
+            <Route path="/details" element={<DashBoardPage />} />
+            {/* TODO: Add elements */}
+            <Route path="/recipes" />
+            <Route path="/recipes/:id" />
+            <Route path="/meal-plan" />
           </Route>
         </Route>
       </Routes>
