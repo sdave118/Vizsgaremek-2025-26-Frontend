@@ -5,6 +5,7 @@ export type ActivityType = {
   id: number;
   name: string;
   caloriesBurnedPerHour: number;
+  isDeleted: boolean;
 };
 
 export type UserActivityType = {
@@ -32,7 +33,7 @@ export const useActivity = () => {
 
   const fetchActivities = useCallback(async () => {
     const res = await api.get("/activity/all", { withCredentials: true });
-    setActivityData(res.data);
+    setActivityData(res.data.data);
   }, []);
 
   const addUserActivity = async (activityId: number, duration: number) => {
@@ -48,8 +49,6 @@ export const useActivity = () => {
     }));
   };
 
-
-
   const burnedCalorie = useMemo(() => {
     if (!userActivityData) return 0;
     return userActivityData?.data.reduce(
@@ -58,16 +57,48 @@ export const useActivity = () => {
     );
   }, [userActivityData]);
 
-   //admin
-  const deleteActivity = async(activityId: number) => {
+  //admin
+
+  const fetchAdminActivities = useCallback(async () => {
+    const res = await api.get("/admin/activities/all", {
+      withCredentials: true,
+    });
+    setActivityData(res.data.data);
+  }, []);
+
+  const deleteActivity = async (activityId: number) => {
     try {
-      await api.patch(`/admin/activities/${activityId}/delete`);
-      setActivityData(prev => prev.filter(a => a.id !== activityId)); //valalmi nemjo
-    } catch (err) {
-    console.error("Delete activity failed", err);
-    };
+      await api.patch(`/admin/activities/${activityId}/delete`, null, {
+        withCredentials: true,
+      });
+      setActivityData((prev) =>
+        prev.map((activity) =>
+          activity.id === activityId
+            ? { ...activity, isDeleted: true }
+            : activity,
+        ),
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+  const restoreActivity = async (activityId: number) => {
+    try {
+      await api.patch(`/admin/activities/${activityId}/restore`, null, {
+        withCredentials: true,
+      });
+      setActivityData((prev) =>
+        prev.map((activity) =>
+          activity.id === activityId
+            ? { ...activity, isDeleted: false }
+            : activity,
+        ),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return {
     userActivityData,
@@ -77,6 +108,7 @@ export const useActivity = () => {
     burnedCalorie,
     addUserActivity,
     deleteActivity,
+    restoreActivity,
+    fetchAdminActivities,
   };
-
 };

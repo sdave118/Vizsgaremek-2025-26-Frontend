@@ -1,7 +1,5 @@
 const IngredientAdmin = () => {
-  return (
-    <div>IngredientAdmin</div>
-  )
-}
+  return <div>IngredientAdmin</div>;
+};
 
-export default IngredientAdmin
+export default IngredientAdmin;
