@@ -3,7 +3,8 @@ import { useRecipes } from "../../hooks/useRecipe";
 import { Flame } from "lucide-react";
 
 const RecipeAdmin = () => {
-  const { fetchAdminRecipes, recipeArray } = useRecipes();
+  const { fetchAdminRecipes, recipeArray, AdminDeleteRecipe, RestoreRecipe } =
+    useRecipes();
 
   useEffect(() => {
     fetchAdminRecipes();
@@ -21,7 +22,7 @@ const RecipeAdmin = () => {
           <div className="h-30 overflow-hidden">
             <img
               className="h-full w-full object-cover"
-              src="https://img.taste.com.au/usDoXvoa/taste/2018/01/healthy-chicken-chow-mein-134805-1.jpg"
+              src={recipe.imageUrl}
               alt="recipe image"
             />
           </div>
@@ -41,26 +42,25 @@ const RecipeAdmin = () => {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              {/* Delete – soft danger */}
               <button
+                onClick={() => AdminDeleteRecipe(recipe.id)}
                 disabled={recipe.isDeleted}
-                className="w-20 rounded border border-red-200 bg-white px-2 py-1 text-sm font-medium text-red-600/90 transition hover:border-red-300 hover:bg-red-50 active:bg-red-100 disabled:cursor-not-allowed disabled:border-red-100 disabled:text-red-400 disabled:opacity-70"
+                className="w-20 rounded border border-red-200 bg-red-100 px-2 py-1 text-sm font-medium text-red-600/90 transition hover:border-red-300 hover:bg-red-200 active:bg-red-100 disabled:cursor-not-allowed disabled:border-gray-300 disabled:bg-gray-100 disabled:text-gray-400"
               >
                 Delete
               </button>
 
-              {/* Details – neutral & trustworthy */}
               <button
                 disabled={recipe.isDeleted}
-                className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100 disabled:cursor-not-allowed disabled:border-emerald-100 disabled:text-emerald-400 disabled:opacity-70"
+                className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100 disabled:cursor-not-allowed disabled:border-gray-300 disabled:bg-gray-100 disabled:text-gray-400"
               >
                 Details
               </button>
 
-              {/* Restore – gentle success */}
               <button
+                onClick={() => RestoreRecipe(recipe.id)}
                 disabled={!recipe.isDeleted}
-                className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100 disabled:cursor-not-allowed disabled:border-emerald-100 disabled:text-emerald-400 disabled:opacity-70"
+                className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100 disabled:cursor-not-allowed disabled:border-gray-300 disabled:bg-gray-100 disabled:text-gray-400"
               >
                 Restore
               </button>

@@ -23,7 +23,7 @@ export type Recipe = {
   isVegan: boolean;
   isVegetarian: boolean;
   isCommunity: boolean;
-  imageUrl: string | null;
+  imageUrl: string;
   ingredients: RecipeIngredient[];
   isDeleted: boolean;
 };
@@ -63,11 +63,43 @@ export const useRecipes = () => {
     }
   }, []);
 
+  const AdminDeleteRecipe = async (recipeId: number) => {
+    try {
+      await api.patch(`admin/recipe/${recipeId}/delete`, null, {
+        withCredentials: true,
+      });
+      setRecipeArray((prev) =>
+        prev.map((recipe) =>
+          recipe.id === recipeId ? { ...recipe, isDeleted: true } : recipe,
+        ),
+      );
+    } catch (error) {
+      console.log("AdminDeleteRecipeError" + error);
+    }
+  };
+
+  const RestoreRecipe = async (recipeId: number) => {
+    try {
+      await api.patch(`admin/recipe/${recipeId}/restore`, null, {
+        withCredentials: true,
+      });
+      setRecipeArray((prev) =>
+        prev.map((recipe) =>
+          recipe.id === recipeId ? { ...recipe, isDeleted: false } : recipe,
+        ),
+      );
+    } catch (error) {
+      console.log("RecipeRestoreError" + error);
+    }
+  };
+
   return {
     recipeArray,
     fetchAllRecipes,
     fetchRecipeById,
     recipeData,
     fetchAdminRecipes,
+    AdminDeleteRecipe,
+    RestoreRecipe,
   };
 };
