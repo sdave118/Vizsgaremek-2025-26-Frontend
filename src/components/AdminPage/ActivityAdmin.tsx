@@ -14,7 +14,7 @@ const ActivityAdmin = () => {
   }, [fetchAdminActivities]);
 
   return (
-    <div className="mx-auto grid max-w-5xl list-none grid-cols-1 gap-4 px-2 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="mx-auto grid max-w-5xl list-none grid-cols-1 gap-4 px-2 sm:grid-cols-2 lg:grid-cols-3 lg:px-2">
       {activityData.map((activity) => (
         <li
           key={activity.id}

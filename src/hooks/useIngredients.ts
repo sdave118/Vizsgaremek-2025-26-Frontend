@@ -20,11 +20,15 @@ const useIngredient = () => {
   const [ingredientData, setIngredientData] = useState<Ingredient[]>([]);
 
   const fetchIngredients = useCallback(async () => {
-    const res = await api.get("/admin/ingredient/all", {
-      withCredentials: true,
-    });
-    console.log("Api response: ", res.data);
-    setIngredientData(res.data);
+    try {
+      const res = await api.get("/admin/ingredient/all", {
+        withCredentials: true,
+      });
+      console.log("Api response: ", res.data);
+      setIngredientData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const deleteIngredient = async (ingredientId: number) => {
