@@ -48,7 +48,7 @@ export const DashBoardPage = () => {
           <CalorieGoal
             consumedCalorie={consumedCalorie}
             burnedCalorie={burnedCalorie}
-            netCalorie={netCalorie}
+            netCalorie={Math.round(consumedCalorie - burnedCalorie)}
             weight={lastAttribute?.weight}
             workoutToday={userActivityData?.data.length ?? 0}
             bmr={lastAttribute?.calories ?? 0} //calorie goal

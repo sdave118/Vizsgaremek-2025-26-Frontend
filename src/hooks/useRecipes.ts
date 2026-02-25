@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import api from "../api/axios";
 
-export type Ingredient = {
+export type RecipeIngredient = {
   ingredientId: number;
   ingredientName: string;
   amount: number;
@@ -14,6 +14,7 @@ export type Recipe = {
   preparationTime: number;
   cookingTime: number;
   description: string;
+  instructions: string;
   portions: number;
   calories: number;
   protein: number;
@@ -23,17 +24,33 @@ export type Recipe = {
   isVegetarian: boolean;
   isCommunity: boolean;
   imageUrl: string | null;
-  ingredients: Ingredient[];
+  isDeleted: boolean;
+  ingredients: RecipeIngredient[];
 };
 
 export const useRecipes = () => {
-  const [recipeData, setRecipeData] = useState<Recipe[]>([]);
+  const [recipeArray, setRecipeArray] = useState<Recipe[]>([]);
+  const [recipeData, setRecipeData] = useState<Recipe>();
 
   const fetchAllRecipes = useCallback(async () => {
-    const res = await api.get("/recipe/all");
-
-    setRecipeData(res.data);
+    try {
+      const res = await api.get("/recipe/all");
+      setRecipeArray(res.data);
+    } catch (error) {
+      console.error("fetchAllRecipes error: " + error);
+      return;
+    }
   }, []);
 
-  return { recipeData, fetchAllRecipes };
+  const fetchRecipeById = useCallback(async (id: number) => {
+    try {
+      const res = await api.get(`/recipe/${id}`);
+      setRecipeData(res.data);
+    } catch (error) {
+      console.error("fetchRecipeById error: " + error);
+      return;
+    }
+  }, []);
+
+  return { recipeArray, fetchAllRecipes, fetchRecipeById, recipeData };
 };

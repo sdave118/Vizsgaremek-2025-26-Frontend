@@ -1,29 +1,47 @@
 import { Clock, Flame, Utensils } from "lucide-react";
 import type { Recipe } from "../../hooks/useRecipes";
 import Tooltip from "@mui/material/Tooltip";
+import { useNavigate } from "react-router-dom";
 
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition-shadow hover:shadow-lg">
-      {recipe.imageUrl && (
+    <div
+      onClick={() => {
+        navigate(`/recipe/${recipe.id}`);
+      }}
+      className="flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition-shadow hover:shadow-lg"
+    >
+      {
         <div className="h-48 overflow-hidden">
           <img
-            src={recipe.imageUrl}
+            src={"2641886.jpg"}
             alt={recipe.name}
             className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
           />
         </div>
-      )}
-      <div className="flex flex-1 flex-col p-4">
-        <div className="mb-2 flex items-center justify-between">
-          <h3 className="mb-2 text-lg">{recipe.name}</h3>
+      }
+      <div className="flex flex-1 flex-col space-y-5 p-4">
+        <h3 className="text-lg">{recipe.name}</h3>
+
+        <div className="flex space-x-2">
           {recipe.isVegan && (
-            <div className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">
+            <div className="rounded-full bg-green-100 px-2 py-1 text-center text-xs text-green-800">
               Vegan
             </div>
           )}
+          {recipe.isVegetarian && (
+            <div className="rounded-full bg-lime-100 px-2 py-1 text-center text-xs text-lime-800">
+              Vegetarian
+            </div>
+          )}
+          {recipe.isVegan && (
+            <div className="rounded-full bg-violet-100 px-2 py-1 text-center text-xs text-violet-800">
+              Community
+            </div>
+          )}
         </div>
-
         <p className="mb-3 line-clamp-2 flex-1 text-sm font-light">
           {recipe.description}
         </p>

@@ -79,6 +79,29 @@ export const useMeals = () => {
     );
   }, [recommendedMeals]);
 
+  const addMeal = useCallback(
+    async (recipeId: number, category: string, amount: number) => {
+      try {
+        const res = await api.post(
+          "/users/me/meals/add",
+          {
+            category: category,
+            recipeId: recipeId,
+            amount: amount,
+          },
+          {
+            withCredentials: true,
+          },
+        );
+        return res.data;
+      } catch (error) {
+        console.error("addMeal error:" + error);
+        throw error;
+      }
+    },
+    [],
+  );
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchRecommendedMeals();
@@ -89,5 +112,6 @@ export const useMeals = () => {
     reFetchMeals: fetchMeals,
     reFetchRecommendedMeals: fetchRecommendedMeals,
     todayRecommendedMeals,
+    addMeal,
   };
 };
