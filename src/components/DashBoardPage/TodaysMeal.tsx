@@ -1,19 +1,27 @@
-import { Plus } from "lucide-react";
 import type { MealsResponse } from "../../hooks/useMeals";
+import AddTodayRecipeModal from "../AddTodayRecipeModal";
+import { useRecipes } from "../../hooks/useRecipes";
+import { useEffect } from "react";
 
 export type TodaysMealProps = {
   todayMeals: MealsResponse | undefined;
+  addMeal: (recipeId: number, category: string, amount: number) => void;
 };
 
-const TodaysMeal = ({ todayMeals }: TodaysMealProps) => {
+const TodaysMeal = ({ todayMeals, addMeal }: TodaysMealProps) => {
+  const { recipeArray, fetchAllRecipes } = useRecipes();
+  useEffect(() => {
+    fetchAllRecipes();
+  }, [fetchAllRecipes]);
+
   return (
     <section className="w-full">
       <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-4 sm:space-y-6 sm:p-6">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold sm:text-xl">Today's Meals</h2>
-          <button className="rounded-full border border-gray-400 p-1 transition-colors hover:bg-gray-100">
-            <Plus className="h-5 w-5" />
-          </button>
+          <AddTodayRecipeModal
+            props={{ isSearch: true, recipeArray, addMeal: addMeal }}
+          />
         </div>
         <div className="space-y-3">
           {todayMeals?.data.map((meal) => (

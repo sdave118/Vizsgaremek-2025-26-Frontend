@@ -93,6 +93,10 @@ export const useMeals = () => {
             withCredentials: true,
           },
         );
+        setMeals((prev) => ({
+          message: prev?.message ?? "",
+          data: [...(prev?.data ?? []), res.data.data],
+        }));
         return res.data;
       } catch (error) {
         console.error("addMeal error:" + error);

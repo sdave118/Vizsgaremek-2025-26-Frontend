@@ -11,8 +11,8 @@ import AddExerciseModal from "../components/ActivityModal";
 import { Link } from "react-router-dom";
 
 export const DashBoardPage = () => {
-  const { meals, todayRecommendedMeals, reFetchMeals } = useMeals();
-  const { consumedCalorie, reFetchDailyIntake, netCalorie } = useCaliorie();
+  const { meals, todayRecommendedMeals, reFetchMeals, addMeal } = useMeals();
+  const { consumedCalorie, reFetchDailyIntake } = useCaliorie();
   const { lastAttribute, fetchAttributes } = useAttributes();
   const {
     activityData,
@@ -40,8 +40,8 @@ export const DashBoardPage = () => {
   return (
     <>
       <div className="from-primary-green-50 min-h-screen min-w-full bg-linear-to-b via-white to-blue-50">
-        <main className="l mx-auto max-w-7xl space-y-6 p-5">
-          <h1 className="text-4xl md:text-5xl">Welcome back!</h1>
+        <main className="mx-auto max-w-7xl space-y-6 p-5">
+          <h1 className="text-4xl md:text-5xl">Welcome!</h1>
           <h2 className="text-md font-extralight text-neutral-600 md:text-xl">
             Here's your nutrition overview for today
           </h2>
@@ -56,7 +56,7 @@ export const DashBoardPage = () => {
           />
 
           <RecommendedMeals recommendedMeals={todayRecommendedMeals} />
-          <TodaysMeal todayMeals={meals} />
+          <TodaysMeal todayMeals={meals} addMeal={addMeal} />
 
           <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <AddExerciseModal

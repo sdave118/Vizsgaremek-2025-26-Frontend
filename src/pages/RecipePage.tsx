@@ -1,19 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useRecipes } from "../hooks/useRecipes";
-import { ChevronDownIcon, Clock, Plus, Utensils } from "lucide-react";
-import Tooltip from "@mui/material/Tooltip";
-import Modal from "../components/ui/Modal";
-import { useNotification } from "../context/NotificationProvider";
+import { Clock, Utensils } from "lucide-react";
+import AddTodayRecipeModal from "../components/AddTodayRecipeModal";
 import { useMeals } from "../hooks/useMeals";
-import { Field, Fieldset, Input, Label, Select } from "@headlessui/react";
 
 const RecipePage = () => {
   const recipeId = useParams();
   const { fetchRecipeById, recipeData } = useRecipes();
-
-  const [category, setCategory] = useState<string>("Breakfast");
-  const [amount, setAmount] = useState<number>(1);
+  const { addMeal } = useMeals();
 
   const splitRecipSteps = (steps: string | undefined) => {
     if (!steps) {
@@ -21,10 +16,6 @@ const RecipePage = () => {
     }
     return steps.split(";");
   };
-  const { addNotification } = useNotification();
-  const { addMeal } = useMeals();
-
-  const mealCategories = ["Breakfast", "Lunch", "Dinner", "Snack"];
 
   useEffect(() => {
     fetchRecipeById(Number(recipeId.id));
@@ -36,85 +27,11 @@ const RecipePage = () => {
         <section className="flex justify-between">
           <h1 className="text-3xl font-semibold">{recipeData?.name}</h1>
           <div>
-            <Modal
-              onClose={() => {
-                setCategory("Breakfast");
-                setAmount(1);
-              }}
-              trigger={
-                <Tooltip title="Add to today's meal">
-                  <button className="hover:bg-primary-green-300 rounded-full border border-gray-300 bg-white p-1 transition-colors hover:text-white">
-                    <Plus className="h-7 w-7" />
-                  </button>
-                </Tooltip>
-              }
-              title="Add to Today's Meal"
-              actions={(close) => (
-                <>
-                  <button
-                    onClick={() => {
-                      close();
-                    }}
-                    className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={async () => {
-                      try {
-                        await addMeal(recipeData?.id ?? 0, category, amount);
-                        addNotification(
-                          `${recipeData?.name} added successfully!`,
-                        );
-                      } catch {
-                        addNotification("Something went wrong", "error");
-                      } finally {
-                        close();
-                      }
-                    }}
-                    className="bg-primary-green-400 hover:bg-primary-green-500 rounded-lg px-4 py-2 text-sm font-semibold text-white"
-                  >
-                    Add Meal
-                  </button>
-                </>
-              )}
-            >
-              <Fieldset className="space-y-5">
-                <Field>
-                  <Label className="text-sm font-medium">Category</Label>
-                  <div className="relative">
-                    <Select
-                      onChange={(e) => {
-                        setCategory(e.target.value);
-                      }}
-                      className="text-sm/6text-black mt-3 block w-full appearance-none rounded-lg border bg-white/5 px-3 py-1.5 focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25"
-                    >
-                      {mealCategories.map((category) => (
-                        <option key={category} value={category}>
-                          {category}
-                        </option>
-                      ))}
-                    </Select>
-                    <ChevronDownIcon
-                      className="group pointer-events-none absolute top-2.5 right-2.5 size-4 fill-white/60"
-                      aria-hidden="true"
-                    />
-                  </div>
-                </Field>
-                <Field>
-                  <Label className="text-sm font-medium">Amount (g)</Label>
-                  <Input
-                    placeholder="1"
-                    min={1}
-                    onChange={(e) => {
-                      setAmount(Number(e.target.value));
-                    }}
-                    type="number"
-                    className="mt-3 block w-full rounded-lg border bg-white/5 px-3 py-1.5 text-sm/6 text-black focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25"
-                  />
-                </Field>
-              </Fieldset>
-            </Modal>
+            {recipeData && (
+              <AddTodayRecipeModal
+                props={{ isSearch: false, recipeData, addMeal }}
+              />
+            )}
           </div>
         </section>
 
