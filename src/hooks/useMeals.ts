@@ -62,7 +62,7 @@ export const useMeals = () => {
 
   const fetchRecommendedMeals = useCallback(async () => {
     try {
-      const res = await api.get("/users/me/daily-meal-plan", {
+      const res = await api.get("/users/me/weekly-meal-plan", {
         withCredentials: true,
       });
       console.log(res.data.dailyMeals);
