@@ -5,7 +5,11 @@ import { useEffect } from "react";
 
 export type TodaysMealProps = {
   todayMeals: MealsResponse | undefined;
-  addMeal: (recipeId: number, category: string, amount: number) => void;
+  addMeal: (
+    recipeId: number,
+    category: string,
+    amount: number,
+  ) => Promise<void>;
 };
 
 const TodaysMeal = ({ todayMeals, addMeal }: TodaysMealProps) => {

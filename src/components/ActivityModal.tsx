@@ -65,9 +65,9 @@ const AddExerciseModal = ({
                   addNotification("Exercise added successfully!");
                 } catch {
                   addNotification("Something went wrong", "error");
+                } finally {
+                  close();
                 }
-
-                close();
               }}
               className="bg-primary-green-400 hover:bg-primary-green-500 rounded-lg px-4 py-2 text-sm font-semibold text-white"
             >

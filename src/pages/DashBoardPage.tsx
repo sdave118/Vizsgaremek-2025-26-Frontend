@@ -37,6 +37,10 @@ export const DashBoardPage = () => {
     fetchActivities,
   ]);
 
+  useEffect(() => {
+    reFetchDailyIntake();
+  }, [meals, reFetchDailyIntake]);
+
   return (
     <>
       <div className="from-primary-green-50 min-h-screen min-w-full bg-linear-to-b via-white to-blue-50">

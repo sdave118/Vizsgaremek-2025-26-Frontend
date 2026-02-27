@@ -28,7 +28,7 @@ const CalorieGoal = ({
         <div className="space-y-2">
           <ProgressBar value={(netCalorie / bmr) * 100} />
           <div className="flex justify-between">
-            <p>{netCalorie}</p>
+            <p>{((netCalorie / bmr) * 100).toFixed(2)}%</p>
             <p>{bmr - netCalorie} remaining</p>
           </div>
         </div>

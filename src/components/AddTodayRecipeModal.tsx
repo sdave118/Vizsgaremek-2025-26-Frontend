@@ -12,12 +12,20 @@ type AddTodayRecipeModalProps =
   | {
       isSearch: true;
       recipeArray: Recipe[];
-      addMeal: (recipeId: number, category: string, amount: number) => void;
+      addMeal: (
+        recipeId: number,
+        category: string,
+        amount: number,
+      ) => Promise<void>;
     }
   | {
       isSearch: false;
       recipeData: Recipe;
-      addMeal: (recipeId: number, category: string, amount: number) => void;
+      addMeal: (
+        recipeId: number,
+        category: string,
+        amount: number,
+      ) => Promise<void>;
     };
 
 const AddTodayRecipeModal = ({
