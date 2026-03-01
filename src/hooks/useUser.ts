@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import api from "../api/axios";
+import type { Recipe } from "./useRecipe";
 
 export type User = {
   id: string;
@@ -10,6 +11,18 @@ export type User = {
   profilePictureUrl: string;
   isDeleted: boolean;
 };
+// user should return birthdate as well?
+
+export type SingleUser = {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  profilePictureUrl: string;
+  isDeleted: boolean;
+  birthDate: string;
+};
 
 export const useUser = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -17,6 +30,7 @@ export const useUser = () => {
   const [profilePictureUrl, setProfilePictureUrl] = useState<string>("");
   const [role, setRole] = useState<string>("");
   const [userData, setUserData] = useState<User[]>([]);
+  const [singleUser, setSingleUser] = useState<SingleUser>();
 
   const fetchUser = useCallback(async () => {
     try {
@@ -36,7 +50,7 @@ export const useUser = () => {
       const res = await api.get("/admin/users/all", { withCredentials: true });
       setUserData(res.data.data);
     } catch (error) {
-      console.log(error);
+      console.log("FetchAllUser error" + error);
     }
   }, []);
 
@@ -51,7 +65,7 @@ export const useUser = () => {
         ),
       );
     } catch (error) {
-      console.log(error);
+      console.log("DeleteUser error" + error);
     }
   };
 
@@ -66,11 +80,22 @@ export const useUser = () => {
         ),
       );
     } catch (error) {
-      console.log(error);
+      console.log("RestoreUser error" + error);
     }
   };
 
+  const getOneUser = async (userId: string) => {
+    try {
+      const res = await api.get(`/admin/users/${userId}`, {
+        withCredentials: true,
+      });
+      setSingleUser(res.data.data);
+    } catch (error) {
+      console.log("SingleUser error" + error);
+    }
+  };
   return {
+    singleUser,
     firstName,
     lastName,
     profilePictureUrl,
@@ -78,6 +103,7 @@ export const useUser = () => {
     userData,
     fetchUser,
     fetchAllUser,
+    getOneUser,
     deleteUser,
     restoreUser,
   };

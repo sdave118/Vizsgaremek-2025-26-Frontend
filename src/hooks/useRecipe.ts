@@ -85,7 +85,7 @@ export const useRecipes = () => {
     }
   };
 
-  const RestoreRecipe = async (recipeId: number) => {
+  const restoreRecipe = async (recipeId: number) => {
     try {
       await api.patch(`admin/recipe/${recipeId}/restore`, null, {
         withCredentials: true,
@@ -107,6 +107,26 @@ export const useRecipes = () => {
     }
   };
 
+  const editRecipe = async (
+    recipeId: number,
+    updatedFields: Partial<Recipe>,
+  ) => {
+    try {
+      const res = await api.patch(
+        `admin/recipe/${recipeId}/edit`,
+        updatedFields,
+        { withCredentials: true },
+      );
+      setRecipeArray((prev) =>
+        prev.map((recipe) =>
+          recipe.id === recipeId ? { ...recipe, ...updatedFields } : recipe,
+        ),
+      );
+    } catch (error) {
+      console.log("EditRecipeError" + error);
+    }
+  };
+
   return {
     recipeArray,
     fetchAllRecipes,
@@ -114,6 +134,7 @@ export const useRecipes = () => {
     recipeData,
     fetchAdminRecipes,
     AdminDeleteRecipe,
-    RestoreRecipe,
+    restoreRecipe,
+    editRecipe,
   };
 };

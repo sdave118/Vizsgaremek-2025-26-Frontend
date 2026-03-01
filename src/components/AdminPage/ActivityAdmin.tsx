@@ -1,7 +1,8 @@
-import { act, useEffect } from "react";
+import { useEffect } from "react";
 import { useActivity } from "../../hooks/useActivity";
 import Modal from "../ui/Modal";
 import { useNotification } from "../../context/NotificationProvider";
+import ActivityAdmintModal from "../ActivityAdminModal";
 
 const ActivityAdmin = () => {
   const {
@@ -9,6 +10,7 @@ const ActivityAdmin = () => {
     fetchAdminActivities,
     deleteActivity,
     restoreActivity,
+    editActivity,
   } = useActivity();
 
   useEffect(() => {
@@ -83,12 +85,11 @@ const ActivityAdmin = () => {
                 )}
               ></Modal>
 
-              <button
-                disabled={activity.isDeleted}
-                className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100 disabled:cursor-not-allowed disabled:border-red-500 disabled:bg-red-200 disabled:text-red-600 disabled:opacity-50"
-              >
-                Edit
-              </button>
+              <ActivityAdmintModal
+                activity={activity}
+                editActivity={editActivity}
+                addNotification={addNotification}
+              />
 
               <button
                 onClick={async () => {

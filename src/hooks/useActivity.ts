@@ -60,10 +60,14 @@ export const useActivity = () => {
   //admin
 
   const fetchAdminActivities = useCallback(async () => {
-    const res = await api.get("/admin/activities/all", {
-      withCredentials: true,
-    });
-    setActivityData(res.data.data);
+    try {
+      const res = await api.get("/admin/activities/all", {
+        withCredentials: true,
+      });
+      setActivityData(res.data.data);
+    } catch (error) {
+      console.log("FetchAdminActivitiesError" + error);
+    }
   }, []);
 
   const deleteActivity = async (activityId: number) => {
@@ -79,7 +83,7 @@ export const useActivity = () => {
         ),
       );
     } catch (error) {
-      console.error(error);
+      console.error("DeleteActivityError" + error);
     }
   };
 
@@ -96,7 +100,30 @@ export const useActivity = () => {
         ),
       );
     } catch (error) {
-      console.log(error);
+      console.log("RestoreActivityError" + error);
+    }
+  };
+
+  const editActivity = async (
+    activityId: number,
+    updatedFields: Partial<ActivityType>,
+  ) => {
+    try {
+      const res = await api.patch(
+        `/admin/activities/${activityId}/edit`,
+        updatedFields,
+        { withCredentials: true },
+      );
+
+      setActivityData((prev) =>
+        prev.map((activity) =>
+          activity.id === activityId
+            ? { ...activity, ...updatedFields }
+            : activity,
+        ),
+      );
+    } catch (error) {
+      console.log("EditActivityError" + error);
     }
   };
 
@@ -110,5 +137,6 @@ export const useActivity = () => {
     deleteActivity,
     restoreActivity,
     fetchAdminActivities,
+    editActivity,
   };
 };

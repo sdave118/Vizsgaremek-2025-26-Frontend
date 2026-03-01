@@ -4,7 +4,14 @@ import Modal from "../ui/Modal";
 import { useNotification } from "../../context/NotificationProvider";
 
 const UserAdmin = () => {
-  const { userData, fetchAllUser, deleteUser, restoreUser } = useUser();
+  const {
+    userData,
+    singleUser,
+    fetchAllUser,
+    deleteUser,
+    restoreUser,
+    getOneUser,
+  } = useUser();
 
   useEffect(() => {
     fetchAllUser();
@@ -82,15 +89,68 @@ const UserAdmin = () => {
                     </button>
                   </>
                 )}
-              ></Modal>
-
-              <button
-                disabled={user.isDeleted}
-                className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100 disabled:cursor-not-allowed disabled:border-red-500 disabled:bg-red-200 disabled:text-red-600 disabled:opacity-50"
+              />
+              <Modal
+                onClose={() => {}}
+                trigger={
+                  <button
+                    onClick={() => getOneUser(user.id)}
+                    disabled={user.isDeleted}
+                    className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100 disabled:cursor-not-allowed disabled:border-red-500 disabled:bg-red-200 disabled:text-red-600 disabled:opacity-50"
+                  >
+                    Details
+                  </button>
+                }
+                title={`${user.firstName} ${user.lastName}'s details`}
+                actions={(close) => (
+                  <button
+                    onClick={() => {
+                      close();
+                    }}
+                    className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100"
+                  >
+                    Cancel
+                  </button>
+                )}
               >
-                Details
-              </button>
+                <div className="space-y-4 text-sm text-emerald-900">
+                  <div className="flex justify-between border-b pb-2">
+                    <span className="font-medium text-emerald-600">Name</span>
+                    <span>
+                      {singleUser?.firstName} {singleUser?.lastName}
+                    </span>
+                  </div>
 
+                  <div className="flex justify-between border-b pb-2">
+                    <span className="font-medium text-emerald-600">Email</span>
+                    <span>{singleUser?.email}</span>
+                  </div>
+
+                  <div className="flex justify-between border-b pb-2">
+                    <span className="font-medium text-emerald-600">
+                      Birth date
+                    </span>
+                    <span>
+                      {singleUser?.birthDate
+                        ? new Date(singleUser.birthDate).toLocaleDateString()
+                        : "—"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="font-medium text-emerald-600">Age</span>
+                    <span>
+                      {singleUser?.birthDate
+                        ? Math.floor(
+                            (Date.now() -
+                              new Date(singleUser.birthDate).getTime()) /
+                              (1000 * 60 * 60 * 24 * 365.25),
+                          )
+                        : "—"}
+                    </span>
+                  </div>
+                </div>
+              </Modal>
               <button
                 onClick={async () => {
                   await restoreUser(user.id);

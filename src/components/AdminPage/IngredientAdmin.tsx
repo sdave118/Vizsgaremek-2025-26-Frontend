@@ -3,6 +3,7 @@ import useIngredients from "../../hooks/useIngredients";
 import { Flame } from "lucide-react";
 import Modal from "../ui/Modal";
 import { useNotification } from "../../context/NotificationProvider";
+import IngredientModal from "../IngredientModal";
 
 const IngredientAdmin = () => {
   const {
@@ -10,6 +11,7 @@ const IngredientAdmin = () => {
     fetchIngredients,
     deleteIngredient,
     restoreIngredient,
+    editIngredient,
   } = useIngredients();
 
   useEffect(() => {
@@ -91,13 +93,11 @@ const IngredientAdmin = () => {
                 )}
               ></Modal>
 
-              <button
-                disabled={ingredient.isDeleted}
-                className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100 disabled:cursor-not-allowed disabled:border-red-500 disabled:bg-red-200 disabled:text-red-600 disabled:opacity-50"
-              >
-                Edit
-              </button>
-
+              <IngredientModal
+                ingredient={ingredient}
+                editIngredient={editIngredient}
+                addNotification={addNotification}
+              />
               <button
                 onClick={async () => {
                   await restoreIngredient(ingredient.id);

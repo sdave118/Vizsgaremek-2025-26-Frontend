@@ -5,8 +5,13 @@ import Modal from "../ui/Modal";
 import { useNotification } from "../../context/NotificationProvider";
 
 const RecipeAdmin = () => {
-  const { fetchAdminRecipes, recipeArray, AdminDeleteRecipe, RestoreRecipe } =
-    useRecipes();
+  const {
+    fetchAdminRecipes,
+    recipeArray,
+    AdminDeleteRecipe,
+    restoreRecipe,
+    editRecipe,
+  } = useRecipes();
 
   useEffect(() => {
     fetchAdminRecipes();
@@ -90,7 +95,7 @@ const RecipeAdmin = () => {
 
               <button
                 onClick={async () => {
-                  await RestoreRecipe(recipe.id);
+                  await restoreRecipe(recipe.id);
                   addNotification(`${recipe.name} restored successfully`);
                 }}
                 disabled={!recipe.isDeleted}

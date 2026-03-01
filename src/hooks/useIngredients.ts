@@ -27,7 +27,7 @@ const useIngredient = () => {
       console.log("Api response: ", res.data);
       setIngredientData(res.data);
     } catch (error) {
-      console.log(error);
+      console.log("FetchIngredient error" + error);
     }
   }, []);
 
@@ -44,7 +44,7 @@ const useIngredient = () => {
         ),
       );
     } catch (error) {
-      console.log(error);
+      console.log("DeleteIngredient error" + error);
     }
   };
 
@@ -61,7 +61,30 @@ const useIngredient = () => {
         ),
       );
     } catch (error) {
-      console.log(error);
+      console.log("RestoreIngredient error" + error);
+    }
+  };
+
+  const editIngredient = async (
+    ingredientId: number,
+    updatedFields: Partial<Ingredient>,
+  ) => {
+    try {
+      const res = await api.patch(
+        `/admin/ingredient/${ingredientId}/edit`,
+        updatedFields,
+        { withCredentials: true },
+      );
+
+      setIngredientData((prev) =>
+        prev.map((ingredient) =>
+          ingredient.id === ingredientId
+            ? { ...ingredient, ...updatedFields }
+            : ingredient,
+        ),
+      );
+    } catch (error) {
+      console.log("EditIngredient error", error);
     }
   };
 
@@ -70,6 +93,7 @@ const useIngredient = () => {
     fetchIngredients,
     deleteIngredient,
     restoreIngredient,
+    editIngredient,
   };
 };
 

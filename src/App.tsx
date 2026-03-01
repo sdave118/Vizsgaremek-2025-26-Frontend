@@ -33,7 +33,7 @@ const App = () => {
           />
 
           <Route path="/admin" element={<AdminPage />}>
-            <Route index element={<Navigate to="activities" replace />} />
+            <Route index element={<Navigate to="users" replace />} />
             <Route path="users" element={<UserAdmin />} />
             <Route path="activities" element={<ActivityAdmin />} />
             <Route path="ingredients" element={<IngredientAdmin />} />
