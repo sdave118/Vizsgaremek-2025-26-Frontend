@@ -9,6 +9,8 @@ export type RecipeIngredient = {
 
 export type Recipe = {
   id: number;
+  userName: string;
+  userProfilePicture: string;
   name: string;
   category: string;
   preparationTime: number;
@@ -75,7 +77,7 @@ export const useRecipes = () => {
                 ...recipe,
                 isDeleted: true,
                 imageUrl:
-                  "https://ik.imagekit.io/nrt5lwugy/pictures/def_Recipe.png?updatedAt=1771956292901",
+                  "https://ik.imagekit.io/nrt5lwugy/pictures/default%20recipe.jpg?updatedAt=1772186089649",
               }
             : recipe,
         ),
@@ -97,7 +99,7 @@ export const useRecipes = () => {
                 ...recipe,
                 isDeleted: false,
                 imageUrl:
-                  "https://ik.imagekit.io/nrt5lwugy/pictures/def_Recipe.png?updatedAt=1771956292901",
+                  "https://ik.imagekit.io/nrt5lwugy/pictures/default%20recipe.jpg?updatedAt=1772186089649",
               }
             : recipe,
         ),
@@ -112,11 +114,9 @@ export const useRecipes = () => {
     updatedFields: Partial<Recipe>,
   ) => {
     try {
-      const res = await api.patch(
-        `admin/recipe/${recipeId}/edit`,
-        updatedFields,
-        { withCredentials: true },
-      );
+      await api.patch(`admin/recipe/${recipeId}/edit`, updatedFields, {
+        withCredentials: true,
+      });
       setRecipeArray((prev) =>
         prev.map((recipe) =>
           recipe.id === recipeId ? { ...recipe, ...updatedFields } : recipe,

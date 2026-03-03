@@ -115,19 +115,19 @@ const UserAdmin = () => {
               >
                 <div className="space-y-4 text-sm text-emerald-900">
                   <div className="flex justify-between border-b pb-2">
-                    <span className="font-medium text-emerald-600">Name</span>
+                    <span className="block text-sm font-medium">Name</span>
                     <span>
                       {singleUser?.firstName} {singleUser?.lastName}
                     </span>
                   </div>
 
                   <div className="flex justify-between border-b pb-2">
-                    <span className="font-medium text-emerald-600">Email</span>
+                    <span className="block text-sm font-medium">Email</span>
                     <span>{singleUser?.email}</span>
                   </div>
 
                   <div className="flex justify-between border-b pb-2">
-                    <span className="font-medium text-emerald-600">
+                    <span className="block text-sm font-medium">
                       Birth date
                     </span>
                     <span>
@@ -138,7 +138,7 @@ const UserAdmin = () => {
                   </div>
 
                   <div className="flex justify-between">
-                    <span className="font-medium text-emerald-600">Age</span>
+                    <span className="block text-sm font-medium">Age</span>
                     <span>
                       {singleUser?.birthDate
                         ? Math.floor(

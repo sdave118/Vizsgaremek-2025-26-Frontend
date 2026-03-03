@@ -1,7 +1,292 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import Modal from "./ui/Modal";
+import type { Recipe } from "../hooks/useRecipe";
+import ImageUpload from "./ImageUpload";
+import type { Ingredient } from "../hooks/useIngredients";
 
-const RecipeAdminModal = () => {
-  return <div>RecipeAdminModal</div>;
+type Props = {
+  recipe: Recipe;
+  editrecipe: (id: number, data: Partial<Recipe>) => Promise<void>;
+  addNotification: (msg: string) => void;
+};
+
+const RecipeAdminModal = ({ recipe, editrecipe, addNotification }: Props) => {
+  const [tempData, setTempData] = useState(recipe);
+  const [openSections, setOpenSections] = useState({
+    basic: true,
+    times: false,
+    nutrition: false,
+    ingredient: false,
+    other: false,
+  });
+
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const Image = (file: File) => {
+    setPreview(URL.createObjectURL(file));
+  };
+
+  useEffect(() => {
+    setTempData(recipe);
+  }, [recipe]);
+
+  const numberFields: { label: string; key: keyof Recipe }[] = [
+    { label: "Calories", key: "calories" },
+    { label: "Protein (g)", key: "protein" },
+    { label: "Carbohydrate (g)", key: "carbohydrate" },
+    { label: "Fat (g)", key: "fat" },
+    { label: "Portions", key: "portions" },
+    { label: "Preparation Time (min)", key: "preparationTime" },
+    { label: "Cooking Time (min)", key: "cookingTime" },
+  ];
+
+  const isChanged =
+    Object.keys(tempData).some(
+      (key) =>
+        key !== "ingredients" &&
+        key !== "imageUrl" &&
+        (tempData as any)[key] !== (recipe as any)[key],
+    ) ||
+    JSON.stringify(tempData.ingredients) !== JSON.stringify(recipe.ingredients);
+
+  const toggleSection = (section: keyof typeof openSections) => {
+    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
+  };
+
+  const loadNumbers = (keys: typeof numberFields) => (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      {keys.map((f) => (
+        <div key={f.key}>
+          <label className="block text-sm font-medium">{f.label}</label>
+          <input
+            type="number"
+            value={tempData[f.key] as number}
+            onChange={(e) =>
+              setTempData((prev) => ({
+                ...prev,
+                [f.key]: Number(e.target.value),
+              }))
+            }
+            className="mt-1 block w-full rounded border px-2 py-1"
+          />
+        </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <Modal
+      onClose={() => {}}
+      trigger={
+        <button
+          disabled={recipe.isDeleted}
+          className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 hover:border-emerald-300 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:border-red-500 disabled:bg-red-200 disabled:text-red-600 disabled:opacity-50"
+        >
+          Edit
+        </button>
+      }
+      title={`Edit ${recipe.name}`}
+      actions={(close) => (
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button
+            onClick={() => close()}
+            className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600 hover:bg-emerald-50"
+          >
+            Cancel
+          </button>
+          <button
+            disabled={!isChanged}
+            onClick={async () => {
+              await editrecipe(recipe.id, tempData);
+              close();
+              addNotification(`${tempData.name} updated successfully`);
+            }}
+            className="w-20 rounded border border-red-500 bg-red-100 px-2 py-1 text-sm font-medium text-red-600 hover:bg-red-200 disabled:cursor-not-allowed disabled:bg-red-200 disabled:opacity-50"
+          >
+            Save
+          </button>
+        </div>
+      )}
+    >
+      <div className="max-h-[80vh] space-y-4 overflow-y-auto px-2 py-2">
+        <div className="flex justify-between">
+          <ImageUpload onImageChange={Image} />
+
+          {preview && (
+            <img
+              src={preview}
+              alt="Uploaded preview"
+              className="ml-3 h-40 w-70 rounded-lg object-cover"
+            />
+          )}
+        </div>
+
+        <div className="rounded border">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between bg-gray-100 px-3 py-2 text-left font-medium hover:bg-gray-200"
+            onClick={() => toggleSection("basic")}
+          >
+            <span>Basic Info</span>
+            <span>{openSections.basic ? "▲" : "▼"}</span>
+          </button>
+          {openSections.basic && (
+            <div className="space-y-3 p-3">
+              <div>
+                <label className="block text-sm font-medium">Name</label>
+                <input
+                  type="text"
+                  value={tempData.name}
+                  onChange={(e) =>
+                    setTempData((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                  className="mt-1 block w-full rounded border px-2 py-1"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Category</label>
+                <input
+                  type="text"
+                  value={tempData.category}
+                  onChange={(e) =>
+                    setTempData((prev) => ({
+                      ...prev,
+                      category: e.target.value,
+                    }))
+                  }
+                  className="mt-1 block w-full rounded border px-2 py-1"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="rounded border">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between bg-gray-100 px-3 py-2 text-left font-medium hover:bg-gray-200"
+            onClick={() => toggleSection("times")}
+          >
+            <span>Times & Portions</span>
+            <span>{openSections.times ? "▲" : "▼"}</span>
+          </button>
+          {openSections.times && (
+            <div className="space-y-3 p-3">
+              {loadNumbers(numberFields.slice(4))}
+            </div>
+          )}
+        </div>
+        <div className="rounded border">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between bg-gray-100 px-3 py-2 text-left font-medium hover:bg-gray-200"
+            onClick={() => toggleSection("nutrition")}
+          >
+            <span>Nutrition</span>
+            <span>{openSections.nutrition ? "▲" : "▼"}</span>
+          </button>
+          {openSections.nutrition && (
+            <div className="space-y-3 p-3">
+              {loadNumbers(numberFields.slice(0, 4))}
+            </div>
+          )}
+        </div>
+        <div className="rounded border">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between bg-gray-100 px-3 py-2 text-left font-medium hover:bg-gray-200"
+            onClick={() => toggleSection("other")}
+          >
+            <span>Other</span>
+            <span>{openSections.other ? "▲" : "▼"}</span>
+          </button>
+          {openSections.other && (
+            <div className="space-y-3 p-3">
+              <label className="block text-sm font-medium">Description</label>
+              <textarea
+                value={tempData.description}
+                onChange={(e) =>
+                  setTempData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                className="mt-1 block w-full rounded border px-2 py-1"
+              />
+              <label className="block text-sm font-medium">Instructions</label>
+              <textarea
+                value={tempData.instructions}
+                onChange={(e) =>
+                  setTempData((prev) => ({
+                    ...prev,
+                    instructions: e.target.value,
+                  }))
+                }
+                className="mt-1 block w-full rounded border px-2 py-1"
+              />
+              <div className="mt-2 flex flex-wrap gap-4">
+                <label className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={tempData.isVegan}
+                    onChange={(e) =>
+                      setTempData((prev) => ({
+                        ...prev,
+                        isVegan: e.target.checked,
+                      }))
+                    }
+                  />
+                  Vegan
+                </label>
+                <label className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={tempData.isVegetarian}
+                    onChange={(e) =>
+                      setTempData((prev) => ({
+                        ...prev,
+                        isVegetarian: e.target.checked,
+                      }))
+                    }
+                  />
+                  Vegetarian
+                </label>
+                <label className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={tempData.isCommunity}
+                    onChange={(e) =>
+                      setTempData((prev) => ({
+                        ...prev,
+                        isCommunity: e.target.checked,
+                      }))
+                    }
+                  />
+                  Community Recipe
+                </label>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="rounded border">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between bg-gray-100 px-3 py-2 text-left font-medium hover:bg-gray-200"
+            onClick={() => toggleSection("ingredient")}
+          >
+            <span>Ingredient</span>
+            <span>{openSections.ingredient ? "▲" : "▼"}</span>
+          </button>
+          {openSections.ingredient && (
+            <div className="flex flex-col space-y-3 p-3">
+              <button className="h-7 w-10 justify-center rounded border">
+                Add
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </Modal>
+  );
 };
 
 export default RecipeAdminModal;

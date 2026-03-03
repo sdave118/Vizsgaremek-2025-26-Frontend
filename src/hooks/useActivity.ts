@@ -109,11 +109,9 @@ export const useActivity = () => {
     updatedFields: Partial<ActivityType>,
   ) => {
     try {
-      const res = await api.patch(
-        `/admin/activities/${activityId}/edit`,
-        updatedFields,
-        { withCredentials: true },
-      );
+      await api.patch(`/admin/activities/${activityId}/edit`, updatedFields, {
+        withCredentials: true,
+      });
 
       setActivityData((prev) =>
         prev.map((activity) =>
@@ -124,6 +122,20 @@ export const useActivity = () => {
       );
     } catch (error) {
       console.log("EditActivityError" + error);
+    }
+  };
+
+  const addActivity = async (data: {
+    name: string;
+    caloriesBurnedPerHour: number;
+  }) => {
+    try {
+      const res = await api.post("admin/activities/add", data, {
+        withCredentials: true,
+      });
+      setActivityData((prev) => prev.concat(res.data.data));
+    } catch (error) {
+      console.log("addActivityError" + error);
     }
   };
 
@@ -138,5 +150,6 @@ export const useActivity = () => {
     restoreActivity,
     fetchAdminActivities,
     editActivity,
+    addActivity,
   };
 };

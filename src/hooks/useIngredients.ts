@@ -16,6 +16,14 @@ export type Ingredient = {
   isDeleted: boolean;
 };
 
+export type CreateIngredient = {
+  name: string;
+  calories: number;
+  protein: number;
+  carbohydrate: number;
+  fat: number;
+};
+
 const useIngredient = () => {
   const [ingredientData, setIngredientData] = useState<Ingredient[]>([]);
 
@@ -70,11 +78,9 @@ const useIngredient = () => {
     updatedFields: Partial<Ingredient>,
   ) => {
     try {
-      const res = await api.patch(
-        `/admin/ingredient/${ingredientId}/edit`,
-        updatedFields,
-        { withCredentials: true },
-      );
+      await api.patch(`/admin/ingredient/${ingredientId}/edit`, updatedFields, {
+        withCredentials: true,
+      });
 
       setIngredientData((prev) =>
         prev.map((ingredient) =>
@@ -88,12 +94,24 @@ const useIngredient = () => {
     }
   };
 
+  const addIngredient = async (ingredient: CreateIngredient) => {
+    try {
+      const res = await api.post("admin/ingredient/add", ingredient, {
+        withCredentials: true,
+      });
+      setIngredientData((prev) => prev.concat(res.data.data));
+    } catch (error) {
+      console.log("AddIngredientError" + error);
+    }
+  };
+
   return {
     ingredientData,
     fetchIngredients,
     deleteIngredient,
     restoreIngredient,
     editIngredient,
+    addIngredient,
   };
 };
 

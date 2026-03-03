@@ -3,6 +3,7 @@ import { useRecipes } from "../../hooks/useRecipe";
 import { Flame } from "lucide-react";
 import Modal from "../ui/Modal";
 import { useNotification } from "../../context/NotificationProvider";
+import RecipeAdminModal from "../RecipeAdminModal";
 
 const RecipeAdmin = () => {
   const {
@@ -25,7 +26,9 @@ const RecipeAdmin = () => {
         <li
           key={recipe.id}
           className={`overflow-hidden rounded-lg ${
-            recipe.isDeleted ? "bg-red-100" : "bg-emerald-100"
+            recipe.isDeleted
+              ? "bg-red-100 text-red-800"
+              : "bg-emerald-100 text-emerald-900"
           }`}
         >
           <div className="h-30 overflow-hidden">
@@ -37,13 +40,21 @@ const RecipeAdmin = () => {
           </div>
           <div className="m-4 flex flex-col gap-3">
             <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <img
+                  className="h-10 w-10 rounded-full border object-cover"
+                  src={recipe.userProfilePicture}
+                  alt="profile picture"
+                />
+                <p className="text-lg font-medium">{recipe.userName}</p>
+              </div>
               <p
-                className={`text-lg font-semibold ${recipe.isDeleted ? "text-red-600" : "text-emerald-600"}`}
+                className={`text-lg font-semibold ${recipe.isDeleted ? "line-through" : ""}`}
               >
                 {recipe.name}
               </p>
               <p
-                className={`${recipe.isDeleted ? "text-red-600" : "text-orange-600"} text-md flex flex-row gap-1`}
+                className={`${recipe.isDeleted ? "text-red-700" : "text-orange-600"} text-md flex flex-row gap-1`}
               >
                 <Flame className="h-5 w-5" />
                 <span className="font-semibold">{recipe.calories}</span>{" "}
@@ -86,12 +97,11 @@ const RecipeAdmin = () => {
                   </>
                 )}
               ></Modal>
-              <button
-                disabled={recipe.isDeleted}
-                className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100 disabled:cursor-not-allowed disabled:border-red-500 disabled:bg-red-200 disabled:text-red-600 disabled:opacity-50"
-              >
-                Details
-              </button>
+              <RecipeAdminModal
+                recipe={recipe}
+                editrecipe={editRecipe}
+                addNotification={addNotification}
+              />
 
               <button
                 onClick={async () => {
