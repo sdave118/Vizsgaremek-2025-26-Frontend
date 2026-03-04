@@ -116,6 +116,7 @@ export const useMeals = () => {
     reFetchMeals: fetchMeals,
     reFetchRecommendedMeals: fetchRecommendedMeals,
     todayRecommendedMeals,
+    recommendedMeals,
     addMeal,
   };
 };

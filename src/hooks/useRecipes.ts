@@ -46,6 +46,7 @@ export const useRecipes = () => {
     try {
       const res = await api.get(`/recipe/${id}`);
       setRecipeData(res.data);
+      return res.data;
     } catch (error) {
       console.error("fetchRecipeById error: " + error);
       return;
