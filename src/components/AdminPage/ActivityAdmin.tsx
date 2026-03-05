@@ -28,7 +28,7 @@ const ActivityAdmin = () => {
           data={{ name: "", caloriesBurnedPerHour: 0 }}
           onSave={addActivity}
           addNotification={addNotification}
-          triggerLabel="Add Activity"
+          triggerLabel="+ Add Activity"
           fields={[
             { name: "name", label: "Name", type: "text" },
             {

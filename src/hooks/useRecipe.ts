@@ -7,6 +7,24 @@ export type RecipeIngredient = {
   amount: number;
 };
 
+export type CreateRecipe = {
+  name: string;
+  category: string;
+  preparationTime: number;
+  cookingTime: number;
+  description: string;
+  instructions: string;
+  portions: number;
+  calories: number;
+  protein: number;
+  carbohydrate: number;
+  fat: number;
+  isVegan: boolean;
+  isVegetarian: boolean;
+  isCommunity: boolean;
+  ingredients: RecipeIngredient[];
+};
+
 export type Recipe = {
   id: number;
   userName: string;
@@ -127,6 +145,52 @@ export const useRecipes = () => {
     }
   };
 
+  const adminUploadRecipeImage = async (recipeId: number, image: File) => {
+    try {
+      const formData = new FormData();
+      formData.append("File", image);
+
+      const res = await api.post(
+        `admin/recipe/create/${recipeId}/upload-image`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      const result = res.data.data;
+
+      setRecipeArray((prev) =>
+        prev.map((recipe) =>
+          recipe.id === recipeId
+            ? { ...recipe, imageUrl: result.url, fileId: result.fileId }
+            : recipe,
+        ),
+      );
+
+      console.log("upload response:", res.data);
+    } catch (error) {
+      console.log("AdminUploadRecipeImageError", error);
+    }
+  };
+
+  const addAdminRecipe = async (
+    recipe: CreateRecipe,
+  ): Promise<Recipe | null> => {
+    try {
+      const res = await api.post("admin/recipe/create", recipe, {
+        withCredentials: true,
+      });
+      setRecipeArray((prev) => prev.concat(res.data.data));
+      return res.data.data;
+    } catch (error) {
+      console.log("AddAdminRecipeError" + error);
+      return null;
+    }
+  };
   return {
     recipeArray,
     fetchAllRecipes,
@@ -136,5 +200,7 @@ export const useRecipes = () => {
     AdminDeleteRecipe,
     restoreRecipe,
     editRecipe,
+    adminUploadRecipeImage,
+    addAdminRecipe,
   };
 };

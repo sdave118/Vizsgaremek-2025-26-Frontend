@@ -1,25 +1,43 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Modal from "../ui/Modal";
-import { useRecipes, type Recipe } from "../../hooks/useRecipe";
+import { type CreateRecipe, type Recipe } from "../../hooks/useRecipe";
 import ImageUpload from "../ImageUpload";
 import type { Ingredient } from "../../hooks/useIngredients";
 
 type Props = {
-  recipe: Recipe;
-  editrecipe: (id: number, data: Partial<Recipe>) => Promise<void>;
+  addAdminRecipe: (data: CreateRecipe) => Promise<Recipe | null>;
   addNotification: (msg: string) => void;
   ingredientData: Ingredient[];
   fetchIngredients: () => Promise<void>;
+  adminUploadRecipeImage: (id: number, file: File) => void;
 };
 
-const RecipeAdminModal = ({
-  recipe,
-  editrecipe,
+const emptyRecipe: CreateRecipe = {
+  name: "",
+  category: "",
+  preparationTime: 0,
+  cookingTime: 0,
+  description: "",
+  instructions: "",
+  portions: 1,
+  calories: 0,
+  protein: 0,
+  carbohydrate: 0,
+  fat: 0,
+  isVegan: false,
+  isVegetarian: false,
+  isCommunity: false,
+  ingredients: [],
+};
+
+const RecipeAdminCreateModal = ({
+  addAdminRecipe,
   addNotification,
   ingredientData,
   fetchIngredients,
+  adminUploadRecipeImage,
 }: Props) => {
-  const [tempData, setTempData] = useState(recipe);
+  const [tempData, setTempData] = useState<CreateRecipe>(emptyRecipe);
   const [openSections, setOpenSections] = useState({
     basic: true,
     times: false,
@@ -27,17 +45,17 @@ const RecipeAdminModal = ({
     ingredient: false,
     other: false,
   });
-  const { adminUploadRecipeImage } = useRecipes();
+
   const [preview, setPreview] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [search, setSearch] = useState("");
   const [selectedIngredient, setSelectedIngredient] =
     useState<Ingredient | null>(null);
   const [amount, setAmount] = useState<number>(0);
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
   const Image = (file: File) => {
     setPreview(URL.createObjectURL(file));
+    setSelectedFile(file);
     const localUrl = URL.createObjectURL(file);
     setSelectedFile(file);
     setTempData((prev) => ({
@@ -46,11 +64,7 @@ const RecipeAdminModal = ({
     }));
   };
 
-  useEffect(() => {
-    setTempData(recipe);
-  }, [recipe]);
-
-  const numberFields: { label: string; key: keyof Recipe }[] = [
+  const numberFields: { label: string; key: keyof CreateRecipe }[] = [
     { label: "Calories", key: "calories" },
     { label: "Protein (g)", key: "protein" },
     { label: "Carbohydrate (g)", key: "carbohydrate" },
@@ -60,16 +74,8 @@ const RecipeAdminModal = ({
     { label: "Cooking Time (min)", key: "cookingTime" },
   ];
 
-  const isChanged =
-    Object.keys(tempData).some(
-      (key) =>
-        key !== "ingredients" &&
-        key !== "imageUrl" &&
-        (tempData as any)[key] !== (recipe as any)[key],
-    ) ||
-    JSON.stringify(tempData.ingredients) !==
-      JSON.stringify(recipe.ingredients) ||
-    selectedFile != null;
+  const isValid =
+    tempData.name.trim() !== "" && tempData.category.trim() !== "";
 
   const toggleSection = (section: keyof typeof openSections) => {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -100,35 +106,35 @@ const RecipeAdminModal = ({
     <Modal
       onClose={() => {}}
       trigger={
-        <button
-          disabled={recipe.isDeleted}
-          className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 hover:border-emerald-300 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:border-red-500 disabled:bg-red-200 disabled:text-red-600 disabled:opacity-50"
-        >
-          Edit
+        <button className="h-8 w-40 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600/90 hover:border-emerald-300 hover:bg-emerald-50">
+          + Add Recipe
         </button>
       }
-      title={`Edit ${recipe.name}`}
+      title="Add New Recipe"
       actions={(close) => (
         <div className="mt-3 flex flex-wrap gap-2">
           <button
-            onClick={() => close()}
+            onClick={() => {
+              close();
+            }}
             className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600 hover:bg-emerald-50"
           >
             Cancel
           </button>
           <button
-            disabled={!isChanged}
+            disabled={!isValid}
             onClick={async () => {
-              await editrecipe(recipe.id, tempData);
-              if (selectedFile) {
-                await adminUploadRecipeImage(recipe.id, selectedFile);
+              const data = await addAdminRecipe(tempData);
+              console.log("created recipe response:", data);
+              if (selectedFile && data) {
+                await adminUploadRecipeImage(data.id, selectedFile);
               }
+              addNotification(`${tempData.name} created successfully`);
               close();
-              addNotification(`${tempData.name} updated successfully`);
             }}
-            className="w-20 rounded border border-red-500 bg-red-100 px-2 py-1 text-sm font-medium text-red-600 hover:bg-red-200 disabled:cursor-not-allowed disabled:bg-red-200 disabled:opacity-50"
+            className="w-20 rounded border border-emerald-500 bg-emerald-100 px-2 py-1 text-sm font-medium text-emerald-600 hover:bg-emerald-200 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Save
+            Create
           </button>
         </div>
       )}
@@ -136,6 +142,7 @@ const RecipeAdminModal = ({
       <div className="max-h-[80vh] space-y-4 px-2 py-2">
         <div className="flex flex-col md:flex-row md:justify-between">
           <ImageUpload onImageChange={Image} />
+
           {preview && (
             <img
               src={preview}
@@ -144,6 +151,7 @@ const RecipeAdminModal = ({
             />
           )}
         </div>
+
         <div className="rounded border">
           <button
             type="button"
@@ -346,7 +354,6 @@ const RecipeAdminModal = ({
                 }}
                 className="block w-full rounded border px-2 py-1 text-sm"
               />
-
               <ul className="max-h-40 overflow-y-auto rounded border text-sm">
                 {ingredientData
                   .filter(
@@ -375,6 +382,7 @@ const RecipeAdminModal = ({
                   <input
                     type="number"
                     min={1}
+                    value={amount || ""}
                     onChange={(e) => setAmount(Number(e.target.value))}
                     className="w-24 rounded border px-2 py-1 text-sm"
                     placeholder="Amount (g)"
@@ -422,4 +430,4 @@ const RecipeAdminModal = ({
   );
 };
 
-export default RecipeAdminModal;
+export default RecipeAdminCreateModal;

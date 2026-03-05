@@ -30,7 +30,7 @@ function GenericAdminModal<T extends Record<string, any>>({
     <Modal
       onClose={() => {}}
       trigger={
-        <button className="w-20 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600 hover:border-emerald-300 hover:bg-emerald-50">
+        <button className="h-8 w-40 rounded border border-emerald-200 bg-white px-2 py-1 text-sm font-medium text-emerald-600 hover:border-emerald-300 hover:bg-emerald-50">
           {triggerLabel}
         </button>
       }

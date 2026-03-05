@@ -28,7 +28,7 @@ const IngredientAdmin = () => {
           data={{ name: "", calories: 0, protein: 0, carbohydrate: 0, fat: 0 }}
           onSave={addIngredient}
           addNotification={addNotification}
-          triggerLabel="Add Ingredient"
+          triggerLabel="+ Add Ingredient"
           fields={[
             { name: "name", label: "Name", type: "text" },
             { name: "calories", label: "Calories", type: "number" },
