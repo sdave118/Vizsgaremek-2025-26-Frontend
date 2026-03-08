@@ -15,6 +15,7 @@ import { useAddRecipeForm } from "../hooks/useAddRecipeForm";
 import { useRecipeSubmit } from "../hooks/useRecipeSubmit";
 import type { NumericField, RecipeCategory } from "../utils/AddRecipe.type";
 import { theme } from "../utils/MaterialUITheme";
+import { motion } from "framer-motion";
 
 const AddRecipePage = () => {
   const form = useAddRecipeForm();
@@ -74,8 +75,13 @@ const AddRecipePage = () => {
   ];
 
   return (
-    <main className="mx-auto space-y-5 md:max-w-7xl md:p-5">
-      <div className="flex flex-1 flex-col items-center justify-center p-4">
+    <main className="from-primary-green-50 mx-auto min-h-screen min-w-full space-y-5 bg-linear-to-b via-white to-blue-50 md:max-w-7xl md:p-5">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.08, ease: "easeInOut" }}
+        className="flex flex-1 flex-col items-center justify-center p-4"
+      >
         <section className="mx-auto w-full space-y-10 rounded-2xl bg-white md:max-w-5xl md:border md:p-10 md:shadow-xl">
           <h1 className="border-primary-green-400 border-b-3 p-5 text-center text-2xl font-bold">
             Upload a new Recipe
@@ -239,7 +245,7 @@ const AddRecipePage = () => {
             </button>
           </div>
         </section>
-      </div>
+      </motion.div>
     </main>
   );
 };
