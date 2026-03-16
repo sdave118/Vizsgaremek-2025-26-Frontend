@@ -12,6 +12,7 @@ export type UserActivityType = {
   activityName: string;
   duration: number;
   caloriesBurned: number;
+  date: string;
 };
 
 export type ActivityResponse = {

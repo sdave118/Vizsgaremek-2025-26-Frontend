@@ -10,7 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const navigation = [
   { name: "Dashboard", to: "/" },
-  { name: "Activities", to: "/activities" },
+  { name: "Statistics", to: "/stats" },
   { name: "Meal plan", to: "/meal-plan" },
   { name: "Recipes", to: "/recipes" },
 ];
