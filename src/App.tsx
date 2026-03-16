@@ -12,7 +12,7 @@ import RecipePage from "./pages/RecipePage";
 import Layout from "./utils/Layout";
 import MealPlanPage from "./pages/MealPlanPage";
 import AddRecipePage from "./pages/AddRecipePage";
-import StatisticsTab from "./components/StatisticsPage/StatisticsTab";
+import StatisticsPage from "./pages/StatisticsPage";
 
 const App = () => {
   const { accessToken } = useAuthContext();
@@ -34,7 +34,7 @@ const App = () => {
             />
             <Route path="/register" element={<SignUpPage />} />
             <Route element={<ProtectedRoute />}>
-              <Route path="/stats" element={<StatisticsTab />} />
+              <Route path="/stats" element={<StatisticsPage />} />
               <Route path="/recipes" element={<RecipesListPage />} />
               <Route path="/recipe/:id" element={<RecipePage />} />
               <Route path="/recipe/add" element={<AddRecipePage />} />
