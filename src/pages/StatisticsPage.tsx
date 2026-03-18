@@ -7,7 +7,7 @@ const StatisticsPage = () => {
   return (
     <StatisticsProvider>
       <main className="from-primary-green-50 min-h-screen min-w-full space-y-10 bg-linear-to-b via-white to-blue-50">
-        <div className="mx-auto mt-10 max-w-7xl space-y-10">
+        <div className="mx-auto mt-10 max-w-7xl space-y-10 p-3">
           <StatisticsCards />
           <StatisticsCharts />
           <StatisticsTab />

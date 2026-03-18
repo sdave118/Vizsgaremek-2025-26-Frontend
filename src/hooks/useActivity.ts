@@ -23,6 +23,8 @@ export const useActivity = () => {
   const [userActivityData, setUserActivityData] = useState<ActivityResponse>();
   const [activityData, setActivityData] = useState<ActivityType[]>([]);
 
+  const today = new Date().toISOString().split("T")[0];
+
   const fetchUserActivities = useCallback(async () => {
     const res = await api.get("/users/me/activities", {
       withCredentials: true,
@@ -49,13 +51,21 @@ export const useActivity = () => {
     }));
   };
 
+  const todayUserActivityData = useMemo(() => {
+    if (!userActivityData) return [];
+
+    return userActivityData?.data.filter((data) => data.date.startsWith(today));
+  }, [userActivityData, today]);
+
   const burnedCalorie = useMemo(() => {
-    if (!userActivityData) return 0;
-    return userActivityData?.data.reduce(
+    if (!todayUserActivityData) return 0;
+
+    return todayUserActivityData.reduce(
       (total, activity) => total + activity.caloriesBurned,
       0,
     );
-  }, [userActivityData]);
+  }, [todayUserActivityData]);
+
   return {
     userActivityData,
     fetchUserActivities,
@@ -63,5 +73,6 @@ export const useActivity = () => {
     activityData,
     burnedCalorie,
     addUserActivity,
+    todayUserActivityData,
   };
 };

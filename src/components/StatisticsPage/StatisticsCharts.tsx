@@ -1,22 +1,37 @@
 import { useStatistics } from "../../context/StatisticsContext";
 import { LineChart, PieChart } from "@mui/x-charts";
+import { useRef, useState, useEffect } from "react";
 
 const StatisticsCharts = () => {
   const { avgMacroNutrients, attributesData } = useStatistics();
+
+  const lineChartContainerRef = useRef(null);
+  const [lineChartWidth, setLineChartWidth] = useState(500);
+
+  useEffect(() => {
+    const el = lineChartContainerRef.current;
+    if (!el) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setLineChartWidth(entry.contentRect.width);
+      }
+    });
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const pieChartData = [
     { id: 0, value: avgMacroNutrients.carbohydrate, label: "Carbohydrate" },
     { id: 1, value: avgMacroNutrients.protein, label: "Protein" },
     { id: 2, value: avgMacroNutrients.fat, label: "Fat" },
   ];
-  const chartAttributes = [...attributesData];
 
-  // If only one data point, duplicate it with today's date
+  const chartAttributes = [...attributesData];
   if (attributesData.length === 1) {
     const today = new Date().toISOString();
-    chartAttributes.push({
-      ...attributesData[0],
-      measuredAt: today,
-    });
+    chartAttributes.push({ ...attributesData[0], measuredAt: today });
   }
 
   const lineChartData = chartAttributes
@@ -35,10 +50,22 @@ const StatisticsCharts = () => {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <section className="col-span-2 flex items-center justify-center rounded-xl border border-gray-200 bg-white p-4">
+        <section
+          ref={lineChartContainerRef}
+          className="col-span-1 flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white p-4 md:col-span-2"
+        >
           <LineChart
             xAxis={[
               { scaleType: "point", data: lineChartData.map((d) => d.date) },
+            ]}
+            yAxis={[
+              {
+                min: Math.max(
+                  0,
+                  Math.min(...lineChartData.map((d) => d.weight)) - 10,
+                ),
+                max: Math.max(...lineChartData.map((d) => d.weight)) + 10,
+              },
             ]}
             series={[
               {
@@ -46,15 +73,15 @@ const StatisticsCharts = () => {
                 label: "Weight (kg)",
               },
             ]}
-            width={500}
+            width={lineChartWidth} // dynamic!
             height={300}
           />
         </section>
-        <section className="flex items-center justify-center rounded-xl border border-gray-200 bg-white p-4">
-          <div className="h-35 w-full">
+
+        <section className="col-span-1 flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white p-4">
+          <div className="w-full" style={{ height: 220 }}>
             <PieChart
-              height={200}
-              colors={["#5C6BC0", "#FFA726", "#EF5350"]}
+              height={220}
               series={[
                 {
                   startAngle: -90,
@@ -69,7 +96,7 @@ const StatisticsCharts = () => {
                 legend: {
                   direction: "horizontal",
                   position: { vertical: "bottom", horizontal: "center" },
-                  sx: { transform: "translateY(-80px)" },
+                  sx: { transform: "translateY(-50px)" },
                 },
               }}
             />
@@ -79,4 +106,5 @@ const StatisticsCharts = () => {
     </>
   );
 };
+
 export default StatisticsCharts;
