@@ -23,7 +23,7 @@ export const DashBoardPage = () => {
   const { lastAttribute, fetchAttributes } = useAttributes();
   const {
     activityData,
-    userActivityData,
+    todayUserActivityData,
     fetchActivities,
     fetchUserActivities,
     burnedCalorie,
@@ -76,7 +76,7 @@ export const DashBoardPage = () => {
               burnedCalorie={burnedCalorie}
               netCalorie={Math.round(consumedCalorie - burnedCalorie)}
               weight={lastAttribute?.weight}
-              workoutToday={userActivityData?.data.length ?? 0}
+              workoutToday={todayUserActivityData?.length ?? 0}
               bmr={lastAttribute?.calories ?? 0}
               goalType={lastAttribute?.goalType ?? "N/A"}
             />

@@ -1,6 +1,51 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import api from "../api/axios";
 
+export type DailyIntakeEntry = {
+  calories: number;
+  carbohydrate: number;
+  protein: number;
+  fat: number;
+  recipeIds: number[];
+  ingredientIds: number[];
+  date: string;
+};
+
+export type RecipeDetail = {
+  id: number;
+  name: string;
+  category: string;
+  calories: number;
+  protein: number;
+  carbohydrate: number;
+  fat: number;
+  imageUrl: string;
+  ingredients: {
+    ingredientId: number;
+    ingredientName: string;
+    amount: number;
+  }[];
+};
+
+export type IngredientDetail = {
+  id: number;
+  name: string;
+  calories: number;
+  protein: number;
+  carbohydrate: number;
+  fat: number;
+};
+
+export type ResolvedDailyEntry = {
+  date: string;
+  calories: number;
+  carbohydrate: number;
+  protein: number;
+  fat: number;
+  recipes: RecipeDetail[];
+  ingredients: IngredientDetail[];
+};
+
 export type MealsResponse = {
   message: string;
   data: Meal[];
@@ -119,4 +164,67 @@ export const useMeals = () => {
     recommendedMeals,
     addMeal,
   };
+};
+
+export const useDailyIntake = () => {
+  const [dailyIntake, setDailyIntake] = useState<ResolvedDailyEntry[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchDailyIntake = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await api.get<DailyIntakeEntry[]>("/users/me/daily-intake", {
+        withCredentials: true,
+      });
+
+      const resolved = await Promise.all(
+        res.data.map(async (entry) => {
+          const [recipes, ingredients] = await Promise.all([
+            Promise.all(
+              entry.recipeIds.map((id) =>
+                api
+                  .get<RecipeDetail>(`/recipe/${id}`, { withCredentials: true })
+                  .then((r) => r.data),
+              ),
+            ),
+            Promise.all(
+              entry.ingredientIds.map((id) =>
+                api
+                  .get<IngredientDetail>(`/ingredient/${id}`, {
+                    withCredentials: true,
+                  })
+                  .then((r) => r.data),
+              ),
+            ),
+          ]);
+
+          return {
+            date: entry.date,
+            calories: entry.calories,
+            carbohydrate: entry.carbohydrate,
+            protein: entry.protein,
+            fat: entry.fat,
+            recipes,
+            ingredients,
+          };
+        }),
+      );
+
+      // Sort newest first
+      resolved.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      );
+      setDailyIntake(resolved);
+    } catch (error) {
+      console.error("fetchDailyIntake error:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchDailyIntake();
+  }, [fetchDailyIntake]);
+
+  return { dailyIntake, loading, reFetchDailyIntake: fetchDailyIntake };
 };
