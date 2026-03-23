@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useRecipes } from "../../hooks/useRecipe";
+import { useRecipes } from "../../hooks/useRecipes";
 import { Flame } from "lucide-react";
 import Modal from "../ui/Modal";
 import { useNotification } from "../../context/NotificationProvider";

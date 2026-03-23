@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Modal from "../ui/Modal";
-import { type CreateRecipe, type Recipe } from "../../hooks/useRecipe";
+import { type CreateRecipe, type Recipe } from "../../hooks/useRecipes";
 import ImageUpload from "../ImageUpload";
 import type { Ingredient } from "../../hooks/useIngredients";
 
