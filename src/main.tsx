@@ -6,6 +6,7 @@ import AuthContextProvider from "./context/AuthContextProvider";
 import { NotificationProvider } from "./context/NotificationProvider";
 import { StyledEngineProvider } from "@mui/material/styles";
 import GlobalStyles from "@mui/material/GlobalStyles";
+import { UserProvider } from "./context/UserContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -13,7 +14,9 @@ createRoot(document.getElementById("root")!).render(
       <NotificationProvider>
         <StyledEngineProvider enableCssLayer>
           <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
-          <App />
+          <UserProvider>
+            <App />
+          </UserProvider>
         </StyledEngineProvider>
       </NotificationProvider>
     </AuthContextProvider>

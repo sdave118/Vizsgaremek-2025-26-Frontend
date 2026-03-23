@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { useUser } from "../../hooks/useUser";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { logoutUser } from "../../services/auth";
 import { Link, NavLink } from "react-router-dom";
@@ -7,6 +5,8 @@ import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { useUserContext } from "../../context/UserContext";
+import { useEffect, useState } from "react";
 
 const navigation = [
   { name: "Dashboard", to: "/" },
@@ -16,12 +16,8 @@ const navigation = [
 ];
 
 const LoggedInNavElements = () => {
-  const { fetchUser, singleUser } = useUser();
+  const { singleUser, fetchUser } = useUserContext();
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
 
   const logout = () => {
     try {
@@ -30,6 +26,10 @@ const LoggedInNavElements = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   return (
     <>
