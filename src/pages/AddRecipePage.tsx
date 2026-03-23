@@ -104,7 +104,8 @@ const AddRecipePage = () => {
                   }
                 >
                   <MenuItem value="Breakfast">Breakfast</MenuItem>
-                  <MenuItem value="Lunch">Lunch</MenuItem>
+                  <MenuItem value="Soup">Lunch</MenuItem>
+                  <MenuItem value="Main Course">Main Course</MenuItem>
                   <MenuItem value="Dinner">Dinner</MenuItem>
                 </Select>
               </FormControl>

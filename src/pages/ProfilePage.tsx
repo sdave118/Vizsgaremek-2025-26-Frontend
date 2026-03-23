@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EllipsisVertical, SquarePen, Trash2, Pencil } from "lucide-react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import EditRecipeModal from "../components/ProfilePage/EditRecipeModal";
@@ -223,10 +223,10 @@ const ProfilePage = () => {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-neutral-300 bg-neutral-50 py-12">
+            <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-neutral-300 bg-neutral-50 py-12">
               <p className="text-sm text-neutral-500">No recipes yet</p>
-              <p className="mt-1 text-xs text-neutral-400">
-                Create your first recipe
+              <p className="mt-1 text-xs text-neutral-400 underline transition-colors hover:text-neutral-500">
+                <Link to="/recipe/add">Create your first recipe</Link>
               </p>
             </div>
           )}

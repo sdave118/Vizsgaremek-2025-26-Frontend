@@ -3,9 +3,7 @@ import Navbar from "../components/Navbar/Navbar";
 
 const Layout = () => {
   const location = useLocation();
-  const hideNavbar =
-    ["/login", "/register"].includes(location.pathname) ||
-    location.pathname.startsWith("/admin");
+  const hideNavbar = ["/login", "/register"].includes(location.pathname);
 
   return (
     <div className="flex min-h-screen flex-col">

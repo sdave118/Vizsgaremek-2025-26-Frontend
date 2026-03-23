@@ -8,14 +8,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useUserContext } from "../../context/UserContext";
 import { useEffect, useState } from "react";
 
-const navigation = [
+const defaultNavigation = [
   { name: "Dashboard", to: "/" },
   { name: "Statistics", to: "/stats" },
   { name: "Meal plan", to: "/meal-plan" },
   { name: "Recipes", to: "/recipes" },
 ];
 
-const LoggedInNavElements = () => {
+type Props = {
+  navigation?: { name: string; to: string }[];
+};
+
+const LoggedInNavElements = ({ navigation = defaultNavigation }: Props) => {
   const { singleUser, fetchUser } = useUserContext();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -113,7 +117,7 @@ const LoggedInNavElements = () => {
         </IconButton>
       </div>
 
-      {/* SideBar */}
+      {/* Sidebar */}
       <Drawer
         anchor="right"
         open={drawerOpen}
@@ -122,7 +126,7 @@ const LoggedInNavElements = () => {
         <div className="flex w-76 items-center justify-between border-b border-neutral-200 px-4 py-3">
           <div className="flex items-center gap-3">
             <img
-              src={singleUser?.profilePictureUrl}
+              src={singleUser?.profilePictureUrl || "/default-avatar.png"}
               alt=""
               className="size-10 rounded-full"
             />
