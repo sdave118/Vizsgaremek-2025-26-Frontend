@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { useAuthContext } from "../../context/AuthContextProvider";
 import { useUserContext } from "../../context/UserContext";
 import LandingPageNavElements from "./LandingPageNavElements";
@@ -19,11 +19,14 @@ const adminNavigation = [
 ];
 
 const Navbar = () => {
+  const location = useLocation();
   const { accessToken } = useAuthContext();
   const { singleUser } = useUserContext();
 
   const navigation =
-    singleUser?.role === "Admin" ? adminNavigation : userNavigation;
+    singleUser?.role === "Admin" && location.pathname.startsWith("/admin")
+      ? adminNavigation
+      : userNavigation;
 
   return (
     <nav className="border-default sticky start-0 top-0 z-20 min-h-16 w-full border-b border-neutral-100 bg-white/80 text-xl backdrop-blur-md">

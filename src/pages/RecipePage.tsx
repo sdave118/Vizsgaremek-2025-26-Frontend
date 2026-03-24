@@ -52,9 +52,9 @@ const RecipePage = () => {
               Vegetarian
             </div>
           )}
-          {recipeData?.isVegan && (
+          {recipeData?.isCommunity && (
             <div className="rounded-full bg-violet-100 px-2 py-1 text-center text-xs text-violet-800">
-              Community
+              {recipeData?.isCommunity ? "Community" : "Official"}
             </div>
           )}
         </motion.section>

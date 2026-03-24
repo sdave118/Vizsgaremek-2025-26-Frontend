@@ -2,7 +2,11 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import { DashBoardPage } from "./pages/DashBoardPage";
 import LoginPage from "./pages/LoginPage";
-import { ProtectedRoute, PublicOnlyRoute } from "./utils/RouterGuard";
+import {
+  AdminRoute,
+  ProtectedRoute,
+  PublicOnlyRoute,
+} from "./utils/RouterGuard";
 import { useAuthContext } from "./context/AuthContextProvider";
 import ScrollToTop from "./utils/ScrollToTop";
 import SignUpPage from "./pages/SignUpPage";
@@ -40,6 +44,14 @@ const App = () => {
             />
             <Route path="/register" element={<SignUpPage />} />
             <Route element={<ProtectedRoute />}>
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="/stats" element={<StatisticsPage />} />
+              <Route path="/recipes" element={<RecipesListPage />} />
+              <Route path="/recipe/:id" element={<RecipePage />} />
+              <Route path="/recipe/add" element={<AddRecipePage />} />
+              <Route path="/meal-plan" element={<MealPlanPage />} />
+            </Route>
+            <Route element={<AdminRoute />}>
               <Route path="/admin" element={<AdminPage />}>
                 <Route index element={<Navigate to="users" replace />} />
                 <Route path="users" element={<UserAdmin />} />
@@ -47,12 +59,6 @@ const App = () => {
                 <Route path="ingredients" element={<IngredientAdmin />} />
                 <Route path="recipes" element={<RecipeAdmin />} />
               </Route>
-              <Route path="profile" element={<ProfilePage />} />
-              <Route path="/stats" element={<StatisticsPage />} />
-              <Route path="/recipes" element={<RecipesListPage />} />
-              <Route path="/recipe/:id" element={<RecipePage />} />
-              <Route path="/recipe/add" element={<AddRecipePage />} />
-              <Route path="/meal-plan" element={<MealPlanPage />} />
             </Route>
           </Route>
         </Route>
