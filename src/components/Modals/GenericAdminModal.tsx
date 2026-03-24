@@ -76,6 +76,7 @@ function GenericAdminModal<T extends Record<string, any>>({
             <label className="block text-sm font-medium">{field.label}</label>
             <input
               type={field.type}
+              min={0}
               placeholder={tempData[field.name]}
               onChange={(e) =>
                 setTempData((prev) => ({

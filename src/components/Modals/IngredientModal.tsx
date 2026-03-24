@@ -90,6 +90,7 @@ const IngredientModal = ({
           <label className="block text-sm font-medium">Calories</label>
           <input
             type="number"
+            min={0}
             value={tempData.calories}
             onChange={(e) =>
               setTempData((prev) => ({
@@ -104,6 +105,7 @@ const IngredientModal = ({
           <label className="block text-sm font-medium">Protein</label>
           <input
             type="number"
+            min={0}
             value={tempData.protein}
             onChange={(e) =>
               setTempData((prev) => ({
@@ -118,6 +120,7 @@ const IngredientModal = ({
           <label className="block text-sm font-medium">Carbohydrates</label>
           <input
             type="number"
+            min={0}
             value={tempData.carbohydrate}
             onChange={(e) =>
               setTempData((prev) => ({

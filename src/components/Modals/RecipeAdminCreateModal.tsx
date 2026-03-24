@@ -89,7 +89,8 @@ const RecipeAdminCreateModal = ({
           <label className="block text-sm font-medium">{f.label}</label>
           <input
             type="number"
-            value={tempData[f.key] as number}
+            min={0}
+            placeholder={tempData[f.key] as string}
             onChange={(e) =>
               setTempData((prev) => ({
                 ...prev,
