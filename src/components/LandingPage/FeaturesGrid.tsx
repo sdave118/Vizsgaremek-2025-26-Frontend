@@ -34,7 +34,7 @@ const featuresList = [
     icon: TrendingUp,
     title: "Personalized Meal Planner",
     description:
-      "Automatic weekly meal planning tailored to your goals — whether you're losing weight, building muscle, or maintaining a healthy lifestyle.",
+      "Automatic weekly meal planning tailored to your goals - whether you're losing weight, building muscle, or maintaining a healthy lifestyle.",
   },
   {
     icon: Dumbbell,
@@ -76,7 +76,7 @@ const FeaturesGrid = () => {
           Everything you need
         </h1>
         <h2 className="mx-auto max-w-2xl font-light text-neutral-500 md:text-lg">
-          A complete toolkit for a healthier lifestyle — calorie tracking,
+          A complete toolkit for a healthier lifestyle - calorie tracking,
           recipes, meal planning, and fitness all in one place.
         </h2>
       </motion.header>
@@ -86,7 +86,7 @@ const FeaturesGrid = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeInOut", delay: 0.1 }}
         viewport={{ once: true }}
-        className="grid gap-6 px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-16 xl:px-24"
+        className="grid items-stretch gap-8 px-10 lg:grid-cols-3 lg:px-30"
       >
         {featuresList.map((feature, i) => (
           <motion.div

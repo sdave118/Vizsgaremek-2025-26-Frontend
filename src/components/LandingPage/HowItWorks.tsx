@@ -8,7 +8,7 @@ const steps = [
     icon: UserPlus,
     title: "Create your account",
     description:
-      "Sign up in seconds. Enter your age, height, weight, and fitness goal — we'll calculate your daily calorie target automatically.",
+      "Sign up in seconds. Enter your age, height, weight, and fitness goal - we'll calculate your daily calorie target automatically.",
     color: "bg-emerald-50",
     iconColor: "text-emerald-600",
     border: "border-emerald-100",
@@ -112,7 +112,7 @@ const HowItWorks = () => {
             to="/register"
             className="bg-primary-green-400 hover:bg-primary-green-500 inline-block rounded-3xl px-10 py-3 text-lg text-white transition-colors duration-300"
           >
-            Start for free
+            Start
           </Link>
         </motion.div>
       </div>

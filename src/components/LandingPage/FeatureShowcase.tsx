@@ -105,7 +105,7 @@ const FeatureShowcase = () => {
           </h1>
           <h2 className="font-extralight text-neutral-600 md:text-xl">
             Get a personalized weekly meal plan with breakfast, soup, lunch, and
-            dinner recommendations — all aligned with your calorie goals.
+            dinner recommendations - all aligned with your calorie goals.
           </h2>
           <div className="space-y-4">
             <div className="rounded-xl border border-gray-200 bg-white p-5 transition-shadow duration-300 hover:shadow-md">
@@ -141,7 +141,7 @@ const FeatureShowcase = () => {
         viewport={{ once: true, amount: 0.3 }}
         className="grid grid-cols-1 gap-10 pt-5 lg:grid-cols-2"
       >
-        <section className="order-2 space-y-6 lg:order-1">
+        <section className="order-1 space-y-6 lg:order-2">
           <div className="inline-block rounded-full bg-blue-50 px-4 py-1 text-sm font-medium text-blue-700">
             Fitness & Progress
           </div>
